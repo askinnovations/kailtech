@@ -142,25 +142,80 @@ const protectedRoutes = {
                   ],
                 },
                 // UnitTypes
-
-                {
-                  path: "modes",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/master-data/Modes")).default,
-                  }),
-                },
+                // modes
+              
+                // ✅ Modes Routes (same pattern)
+                  {
+                    path: "modes",
+                    children: [
+                      {
+                        path: "", // ✅ List page: /master-data/modes
+                        lazy: async () => ({
+                          Component: (await import("app/pages/dashboards/master-data/Modes")).default,
+                        }),
+                      },
+                      {
+                        path: "create", // ✅ Add page: /master-data/modes/create
+                        lazy: async () => ({
+                          Component: (await import("app/pages/dashboards/master-data/Modes/AddModes")).default,
+                        }),
+                      },
+                      // {
+                      //   path: "edit/:id", // ✅ Edit page: /master-data/modes/edit/1
+                      //   lazy: async () => ({
+                      //     Component: (await import("app/pages/dashboards/master-data/Modes/EditModes")).default,
+                      //   }),
+                      // },
+                    ],
+                  },
                 {
                   path: "tax-slabs",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/master-data/TaxSlabs")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // List page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/TaxSlabs")).default,
+                      }),
+                    },
+                    {
+                      path: "create", // Add page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/TaxSlabs/AddTaxSlab")).default,
+                      }),
+                    },
+                    // {
+                    //   path: "edit/:id", // Edit page
+                    //   lazy: async () => ({
+                    //     Component: (await import("app/pages/dashboards/master-data/TaxSlabs/EditTaxSlab")).default,
+                    //   }),
+                    // },
+                  ],
                 },
+
                 {
-                  path: "verticals",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/master-data/Verticals")).default,
-                  }),
-                },
+                path: "verticals",
+                children: [
+                  {
+                    path: "", // List page
+                    lazy: async () => ({
+                      Component: (await import("app/pages/dashboards/master-data/Verticals")).default,
+                    }),
+                  },
+                  {
+                    path: "create", // Add page
+                    lazy: async () => ({
+                      Component: (await import("app/pages/dashboards/master-data/Verticals/AddVertical")).default,
+                    }),
+                  },
+                  // {
+                  //   path: "edit/:id", // Edit page
+                  //   lazy: async () => ({
+                  //     Component: (await import("app/pages/dashboards/master-data/Verticals/EditVertical")).default,
+                  //   }),
+                  // },
+                ],
+              },
+
                 // {
                 //   path: "document-master",
                 //   lazy: async () => ({
@@ -169,16 +224,52 @@ const protectedRoutes = {
                 // },
                 {
                   path: "currencies",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/master-data/Currencies")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // ✅ Currency List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/Currencies")).default,
+                      }),
+                    },
+                    {
+                      path: "create", // ✅ Add Currency Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/Currencies/AddCurrency")).default,
+                      }),
+                    },
+                    // {
+                    //   path: "edit/:id", // ✅ Edit Currency Page
+                    //   lazy: async () => ({
+                    //     Component: (await import("app/pages/dashboards/master-data/Currencies/EditCurrency")).default,
+                    //   }),
+                    // },
+                  ],
                 },
+
                 {
                   path: "units",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/master-data/Units")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // ✅ List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/Units")).default,
+                      }),
+                    },
+                    {
+                      path: "create", // ✅ Add Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/Units/AddUnit")).default,
+                      }),
+                    },
+                    // {
+                    //   path: "edit/:id", // ✅ Edit Page
+                    //   lazy: async () => ({
+                    //     Component: (await import("app/pages/dashboards/master-data/Units/EditUnit")).default,
+                    //   }),
+                    // },
+                  ],
                 },
+
                 // {
                 //   path: "statuary-detail",
                 //   lazy: async () => ({
@@ -216,8 +307,184 @@ const protectedRoutes = {
                 //   }),
                 // },
               ],
-            }
+            },
+            {
+            path: "calibration-operations",
+            children: [
+              {
+                path: "calibration-standards",
+                children: [
+                  {
+                    path: "", // List Page
+                    lazy: async () => ({
+                      Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards")).default,
+                    }),
+                  },
+                  {
+                    path: "add", // Add Page
+                    lazy: async () => ({
+                      Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards/AddCalibrationStandards")).default,
+                    }),
+                  },
+                ],
+              },
+                
+                {
+                  path: "calibration-methods",
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods")).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods/AddCalibrationMethods")).default,
+                      }),
+                    },
+                  ],
+                },
+                // {
+                //   path: "bio-medical-visual-test",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/BioMedicalVisualTest")).default,
+                //   }),
+                // },
+                // {
+                //   path: "bio-medical-electrical-safety",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/BioMedicalElectricalSafety")).default,
+                //   }),
+                // },
+                // {
+                //   path: "calibration-list-of-instruments",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/CalibrationListOfInstruments")).default,
+                //   }),
+                // },
+                // {
+                //   path: "discipline",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/Discipline")).default,
+                //   }),
+                // },
+                // {
+                //   path: "revision-requests",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/RevisionRequests")).default,
+                //   }),
+                // },
+                // {
+                //   path: "lrn-cancel-requests",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/LrnCancelRequests")).default,
+                //   }),
+                // },
+                // {
+                //   path: "cmc-scope-sheet",
+                //   lazy: async () => ({
+                //     Component: (await import("app/pages/dashboards/calibration-operations/CMCScopeSheet")).default,
+                //   }),
+                // },
+              ],
+            },
+            {
+              path: "people",
+              children: [
+                {
+                  path: "customer-categories",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/customer-categories")).default,
+                  }),
+                },
+                {
+                  path: "customer-categories/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/customer-categories/AddCustomerCategory")).default,
+                  }),
+                },
 
+                {
+                  path: "customer-types",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/customer-types")).default,
+                  }),
+                },
+                {
+                  path: "customer-types/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/customer-types/AddCustomerType")).default,
+                  }),
+                },
+
+                {
+                  path: "specific-purposes",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/specific-purposes")).default,
+                  }),
+                },
+                {
+                  path: "specific-purposes/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/specific-purposes/AddSpecificPurpose")).default,
+                  }),
+                },
+
+                {
+                  path: "customers",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/customers")).default,
+                  }),
+                },
+                {
+                  path: "customers/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/customers/AddCustomer")).default,
+                  }),
+                },
+
+                {
+                  path: "promoters",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/promoters")).default,
+                  }),
+                },
+                {
+                  path: "promoters/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/promoters/AddPromoter")).default,
+                  }),
+                },
+
+                {
+                  path: "suppliers",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/suppliers")).default,
+                  }),
+                },
+                {
+                  path: "suppliers/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/suppliers/AddSupplier")).default,
+                  }),
+                },
+
+                {
+                  path: "users",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/users")).default,
+                  }),
+                },
+                {
+                  path: "users/add",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/dashboards/people/users/AddUser")).default,
+                  }),
+                },
+              ],
+            }
           ],
         },
       ],

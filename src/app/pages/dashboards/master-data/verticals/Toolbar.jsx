@@ -20,6 +20,8 @@ import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import { Button, Input } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
+import { useNavigate } from "react-router";
+
 // import { orderStatusOptions } from "./data";
 
 // ----------------------------------------------------------------------
@@ -27,7 +29,8 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 export function Toolbar({ table }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-
+  const navigate = useNavigate(); 
+  
   return (
     <div className="table-toolbar">
       <div
@@ -48,11 +51,13 @@ export function Toolbar({ table }) {
           {/* Button */}
           <div>
             <Button
-              className="h-9 rounded-md px-4 text-sm font-medium"
-              color="primary"
-            >
-              + Add New Vertical
-            </Button>
+            onClick={() => navigate("/dashboards/master-data/verticals/create")}
+            className="h-9 rounded-md px-4 text-sm font-medium"
+            color="primary"
+          >
+            + Add New Vertical
+          </Button>
+
           </div>
         </div>
 

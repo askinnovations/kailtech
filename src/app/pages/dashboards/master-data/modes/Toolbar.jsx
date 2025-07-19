@@ -1,9 +1,5 @@
 // Import Dependencies
-import {
-
-  MagnifyingGlassIcon,
-
-} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 // import { TbUpload } from "react-icons/tb";
 import clsx from "clsx";
 import {
@@ -15,7 +11,7 @@ import {
 } from "@headlessui/react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 
-
+import { useNavigate } from "react-router";
 
 import { Button, Input } from "components/ui";
 import { TableConfig } from "./TableConfig";
@@ -27,6 +23,7 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 export function Toolbar({ table }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const navigate = useNavigate(); 
 
   return (
     <div className="table-toolbar">
@@ -47,17 +44,14 @@ export function Toolbar({ table }) {
 
           {/* Button */}
           <div>
-            <Button
+          <Button
+              onClick={() => navigate("/dashboards/master-data/modes/create")}
               className="h-9 rounded-md px-4 text-sm font-medium"
               color="primary"
-            >
-              + Add New Modes
-            </Button>
+            >+ Add New Modes </Button>
+          
           </div>
         </div>
-
-          
-        
         
         {isXs ? (
           <Menu as="div" className="relative inline-block text-left">

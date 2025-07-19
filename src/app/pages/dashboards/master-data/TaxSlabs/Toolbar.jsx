@@ -21,12 +21,14 @@ import { Button, Input } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 // import { orderStatusOptions } from "./data";
+import { useNavigate } from "react-router";
 
 // ----------------------------------------------------------------------
 
 export function Toolbar({ table }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const navigate = useNavigate(); 
 
   return (
     <div className="table-toolbar">
@@ -48,11 +50,13 @@ export function Toolbar({ table }) {
           {/* Button */}
           <div>
             <Button
-              className="h-9 rounded-md px-4 text-sm font-medium"
-              color="primary"
-            >
-              + Add New slabs
-            </Button>
+          onClick={() => navigate("/dashboards/master-data/tax-slabs/create")}
+          className="h-9 rounded-md px-4 text-sm font-medium"
+          color="primary"
+        >
+          + Add New Tax Slab
+        </Button>
+
           </div>
         </div>
 

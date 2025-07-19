@@ -124,7 +124,7 @@ export default function OrdersDatatableV1() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
-    <Page title="Orders Datatable v1">
+    <Page title="Unit Types List">
       <div className="transition-content w-full pb-5">
         <div
           className={clsx(
