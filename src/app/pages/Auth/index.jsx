@@ -27,9 +27,9 @@ export default function SignIn() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      username: "Ruby",
-      password: "Ruby@123!@#",
-      fiscalYear: "2025-26",
+      username: "username",
+      password: "password",
+      fiscalYear: "fiscalYear",
     },
   });
 

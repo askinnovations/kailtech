@@ -124,7 +124,7 @@ export function AuthProvider({ children }) {
     formData.append("password", password);
     formData.append("finyear", finyear);
 
-    const response = await axios.post("https://lims.kailtech.in/api/login", formData);
+    const response = await axios.post("/login", formData);
 
     const { token, permissions, user } = response.data;
 
