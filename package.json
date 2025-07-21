@@ -24,7 +24,7 @@
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.21.3",
     "apexcharts": "^4.7.0",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "cleave.js": "^1.6.0",
     "color": "^5.0.0",
     "dayjs": "^1.11.13",

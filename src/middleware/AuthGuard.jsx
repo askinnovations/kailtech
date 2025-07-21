@@ -13,12 +13,17 @@ export default function AuthGuard() {
 
   const location = useLocation();
 
+  const redirectPath =
+  location.pathname && location.pathname !== "/login"
+    ? location.pathname
+    : "/dashboards/home";
+
   if (!isAuthenticated) {
     return (
       <Navigate
-        to={`${GHOST_ENTRY_PATH}?${REDIRECT_URL_KEY}=${location.pathname}`}
-        replace
-      />
+    to={`${GHOST_ENTRY_PATH}?${REDIRECT_URL_KEY}=${redirectPath}`}
+    replace
+  />
     );
   }
 

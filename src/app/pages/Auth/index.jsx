@@ -1,21 +1,25 @@
 // Import Dependencies
-import { Link } from "react-router";
+import { Link } from "react-router"; // ✅ Corrected from "react-router"
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import {  useState } from "react";
+import { useNavigate, useLocation  } from "react-router";
+
 
 // Local Imports
-
 import { Button, Card, Checkbox, Input, InputErrorMsg } from "components/ui";
-import { useAuthContext } from "app/contexts/auth/context";
 import { schema } from "./schema";
 import { Page } from "components/shared/Page";
-import appLogo from "assets/logo.png"; 
-
-// ----------------------------------------------------------------------
+import appLogo from "assets/logo.png";
+import { useAuthContext } from "app/contexts/auth/context";
 
 export default function SignIn() {
-  const { login, errorMessage } = useAuthContext();
+  const navigate = useNavigate();
+  const location = useLocation(); 
+  const [errorMessage, setErrorMessage] = useState(null);
+  const { login } = useAuthContext();
+
   const {
     register,
     handleSubmit,
@@ -23,18 +27,33 @@ export default function SignIn() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      username: "username",
-      password: "password",
+      username: "Ruby",
+      password: "Ruby@123!@#",
       fiscalYear: "2025-26",
     },
   });
 
-  const onSubmit = (data) => {
-    login({
-      username: data.username,
-      password: data.password,
-      fiscalYear: data.fiscalYear, 
-    });
+   const onSubmit = async (data) => {
+    try {
+      // Call login method from context
+      await login({
+        username: data.username,
+        password: data.password,
+        finyear: data.fiscalYear,
+      });
+
+      // Handle redirect after login
+      const searchParams = new URLSearchParams(location.search);
+      const redirect = searchParams.get("redirect");
+      const finalRedirect = redirect && redirect !== "null" && redirect !== "undefined"? redirect : "/dashboards/home";
+      navigate(finalRedirect, { replace: true });
+
+
+    } catch (err) {
+      setErrorMessage(
+        err?.response?.data?.message || err?.message || "Login failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -42,15 +61,15 @@ export default function SignIn() {
       <main className="min-h-100vh grid w-full grow grid-cols-1 place-items-center">
         <div className="w-full max-w-[26rem] p-4 sm:px-5">
           <div className="text-center">
-            
             <div className="mt-4">
-             <Link to="/">
-              <img
-                src={appLogo}
-                alt="App Logo"
-                className="h-10 w-auto object-contain text-center" style={{ marginLeft: '70px' }}
-              />
-            </Link>
+              <Link to="/">
+                <img
+                  src={appLogo}
+                  alt="App Logo"
+                  className="h-10 w-auto object-contain text-center"
+                  style={{ marginLeft: "70px" }}
+                />
+              </Link>
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 Welcome Back
               </h2>
@@ -65,12 +84,7 @@ export default function SignIn() {
                 <Input
                   label="Username"
                   placeholder="Enter Username"
-                  prefix={
-                    <EnvelopeIcon
-                      className="size-5 transition-colors duration-200"
-                      strokeWidth="1"
-                    />
-                  }
+                  prefix={<EnvelopeIcon className="size-5" strokeWidth="1" />}
                   {...register("username")}
                   error={errors?.username?.message}
                 />
@@ -78,25 +92,19 @@ export default function SignIn() {
                   label="Password"
                   placeholder="Enter Password"
                   type="password"
-                  prefix={
-                    <LockClosedIcon
-                      className="size-5 transition-colors duration-200"
-                      strokeWidth="1"
-                    />
-                  }
+                  prefix={<LockClosedIcon className="size-5" strokeWidth="1" />}
                   {...register("password")}
                   error={errors?.password?.message}
                 />
               </div>
 
               <div className="mt-2">
-                <InputErrorMsg
-                  when={errorMessage && errorMessage?.message !== ""}
-                >
-                  {errorMessage?.message}
+                <InputErrorMsg when={errorMessage}>
+                  {errorMessage}
                 </InputErrorMsg>
               </div>
-               <div className="mt-4">
+
+              <div className="mt-4">
                 <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-dark-100">
                   Select Financial Year
                 </label>
@@ -113,12 +121,11 @@ export default function SignIn() {
                 </select>
               </div>
 
-
               <div className="mt-4 flex items-center justify-between space-x-2">
                 <Checkbox label="Remember me" />
                 <a
                   href="##"
-                  className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100"
+                  className="text-xs text-gray-400 hover:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100"
                 >
                   Forgot Password?
                 </a>
@@ -128,11 +135,7 @@ export default function SignIn() {
                 Sign In
               </Button>
             </form>
-            
-            
-            
           </Card>
-          
         </div>
       </main>
     </Page>
