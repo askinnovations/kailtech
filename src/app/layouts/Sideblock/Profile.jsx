@@ -10,13 +10,13 @@ import {
   // Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import {TbUser } from "react-icons/tb";
-// TbCoins
 import { Link } from "react-router";
 
 // Local Imports
 import { Avatar, AvatarDot, Button } from "components/ui";
 import { useNavigate } from "react-router"; // make sure it's "react-router-dom"
 // ----------------------------------------------------------------------
+import { useAuthContext } from "app/contexts/auth/context"; // ✅ import
 
 const links = [
   {
@@ -27,33 +27,18 @@ const links = [
     Icon: TbUser,
     color: "warning",
   },
-  // {
-  //   id: "2",
-  //   title: "Billing",
-  //   description: "Your billing information",
-  //   to: "/settings/billing",
-  //   Icon: TbCoins,
-  //   color: "error",
-  // },
-  // {
-  //   id: "3",
-  //   title: "Settings",
-  //   description: "Webapp settings",
-  //   to: "/settings/appearance",
-  //   Icon: Cog6ToothIcon,
-  //   color: "success",
-  // },
+  
 ];
 
 export function Profile() {
-  const navigate = useNavigate();
+    const navigate = useNavigate(); 
+    const { logout, user } = useAuthContext(); // ✅
 
-  const handleLogout = () => {
-    // ✅ 1. Clear user session/token if needed
-    // localStorage.removeItem("token");
 
-    // ✅ 2. Redirect to login with redirect query
-    navigate("/login?redirect=/");
+  const handleLogout = async () => {
+    await logout(); // ✅ Call API and clear session
+  // ✅ Redirect user to root WITHOUT redirect param
+     navigate("/login?redirect=", { replace: true }); // ✅ no ?redirect http://localhost:5175/login?redirect=
   };
 
   return (
@@ -83,9 +68,7 @@ export function Profile() {
         leaveTo="translate-y-2 opacity-0"
       >
         <PopoverPanel
-          anchor={{ to: "bottom end", gap: 12 }}
-          className="border-gray-150 shadow-soft dark:border-dark-600 dark:bg-dark-700 z-70 flex w-64 flex-col rounded-lg border bg-white transition dark:shadow-none"
-        >
+          anchor={{ to: "bottom end", gap: 12 }} className="border-gray-150 shadow-soft dark:border-dark-600 dark:bg-dark-700 z-70 flex w-64 flex-col rounded-lg border bg-white transition dark:shadow-none">
           {({ close }) => (
             <>
               <div className="dark:bg-dark-800 flex items-center gap-4 rounded-t-lg bg-gray-100 px-4 py-5">
@@ -95,7 +78,7 @@ export function Profile() {
                     className="hover:text-primary-600 focus:text-primary-600 dark:text-dark-100 dark:hover:text-primary-400 dark:focus:text-primary-400 text-base font-medium text-gray-700"
                     to="/settings/general"
                   >
-                    Travis Fuller
+                    {user?.username ?? "Guest"}
                   </Link>
 
                   <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400">

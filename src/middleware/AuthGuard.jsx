@@ -14,9 +14,9 @@ export default function AuthGuard() {
   const location = useLocation();
 
   const redirectPath =
-  location.pathname && location.pathname !== "/login"
+  location.pathname && location.pathname !== "/login" && location.pathname !== "/logout"
     ? location.pathname
-    : "/dashboards/home";
+    : "";
 
   if (!isAuthenticated) {
     return (

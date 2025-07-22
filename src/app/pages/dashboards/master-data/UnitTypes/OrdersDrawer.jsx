@@ -131,9 +131,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           </p>
 
           <div className="mt-1 grow overflow-x-auto overscroll-x-contain px-4 sm:px-5">
-            <Table
-              hoverable
-              className="w-full text-left text-xs-plus rtl:text-right [&_.table-td]:py-2"
+            <Table hoverable className="w-full text-left text-xs-plus rtl:text-right [&_.table-td]:py-2"
             >
               <THead>
                 <Tr className="border-y border-transparent border-b-gray-200 dark:border-b-dark-500">

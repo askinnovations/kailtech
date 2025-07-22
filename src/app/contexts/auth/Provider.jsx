@@ -21,30 +21,29 @@ const initialState = {
 };
 
 const reducerHandlers = {
-  INITIALIZE: (state, action) => {
-    const { isAuthenticated, user } = action.payload;
-    return {
-      ...state,
-      isAuthenticated,
-      isInitialized: true,
-      user : user ?? null,
-    };
-  },
+  INITIALIZE: (state, action) => ({
+    ...state,
+    isAuthenticated: action.payload.isAuthenticated,
+    isInitialized: true,
+    user: action.payload.user ?? null,
+  }),
+
 
   LOGIN_REQUEST: (state) => {
     return {
       ...state,
       isLoading: true,
+      
     };
   },
 
   LOGIN_SUCCESS: (state, action) => {
-    const user = action?.payload?.user ?? {};
+    
     return {
       ...state,
       isAuthenticated: true,
       isLoading: false,
-      user,
+      user: action?.payload?.user ?? {},
     };
   },
 
@@ -71,6 +70,7 @@ const reducer = (state, action) => {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+   
 
   useEffect(() => {
     const init = async () => {
@@ -80,12 +80,22 @@ export function AuthProvider({ children }) {
         if (authToken && isTokenValid(authToken)) {
           setSession(authToken);
 
+          const userData = localStorage.getItem("user");
+          let parsedUser = null;
+          if (userData && userData !== "undefined" && userData !== "null") {
+            try {
+              parsedUser = JSON.parse(userData);
+            } catch (err) {
+              console.error("Invalid user data in localStorage", err);
+              localStorage.removeItem("user"); // 🧹 Clean invalid entry
+            }
+          }
           
           dispatch({
             type: "INITIALIZE",
             payload: {
               isAuthenticated: true,
-              user: null,
+               user: parsedUser,
             },
           });
         } else {
@@ -114,6 +124,8 @@ export function AuthProvider({ children }) {
     init();
   }, []);
 
+
+
  // ✅ Login function used in SignIn.jsx
   const login = async ({ username, password, finyear }) => {
   dispatch({ type: "LOGIN_REQUEST" });
@@ -125,20 +137,32 @@ export function AuthProvider({ children }) {
     formData.append("finyear", finyear);
 
     const response = await axios.post("/login", formData);
+  
 
     const { token, permissions, user } = response.data;
 
     if (!isString(token)) {
       throw new Error("Invalid token received");
     }
-
+    
     // Save token
     localStorage.setItem("authToken", token);
     localStorage.setItem("userPermissions", JSON.stringify(permissions));
+    if (user && typeof user === "object") {
+        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("user"); // 🧹 fallback
+      }
+    // console.log("✅ User data from API:", user);
+
+
     setSession(token); // optionally set default header
 
     // ✅ Use actual user from response
-    dispatch({ type: "LOGIN_SUCCESS", payload: { user: user ?? {} } });
+    dispatch({
+      type: "LOGIN_SUCCESS",
+      payload: { user },
+    });
 
   } catch (err) {
     dispatch({
@@ -150,10 +174,29 @@ export function AuthProvider({ children }) {
   }
 };
 
-  const logout = async () => {
+    const logout = async () => {
+  try {
+    await axios.post("/logout");
+  } catch (error) {
+    console.error("Logout failed:", error);
+  } finally {
     setSession(null);
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userPermissions");
+    localStorage.removeItem("user");
+
+    // ✅ Clean URL BEFORE AuthGuard can read stale path
+    window.history.replaceState({}, document.title, "/login");
+
+    // ✅ Now logout from context
     dispatch({ type: "LOGOUT" });
-  };
+
+    // ✅ Reload the app to prevent stale route re-capture
+    window.location.href = "/login?redirect="; // final clean reset
+  }
+};
+
+
 
   if (!children) {
     return null;

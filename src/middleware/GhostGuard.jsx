@@ -13,11 +13,18 @@ export default function GhostGuard() {
   const { isAuthenticated } = useAuthContext();
 
 const urlParam = new URLSearchParams(window.location.search).get(REDIRECT_URL_KEY);
-const url = urlParam && urlParam !== "null" && urlParam !== "undefined" ? urlParam : null;
+const url = urlParam && 
+urlParam !== "null" && 
+urlParam !== "undefined" && 
+urlParam !== "/logout" && 
+urlParam !== "" 
+  ? urlParam 
+  : null;
 
 
   if (isAuthenticated) {
-    if (url && url !== "") {
+    if (url) {
+      window.history.replaceState({}, document.title, "/"); // ✅ clean query param
       return <Navigate to={url} />;
     }
     return <Navigate to={HOME_PATH} />;

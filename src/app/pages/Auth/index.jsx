@@ -27,13 +27,14 @@ export default function SignIn() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      username: "username",
-      password: "password",
-      fiscalYear: "fiscalYear",
+      username: "",
+      password: "",
+      fiscalYear: "",
     },
   });
 
    const onSubmit = async (data) => {
+    //  console.log("🚀 Form Data Submitted:", data); 
     try {
       // Call login method from context
       await login({
@@ -45,7 +46,10 @@ export default function SignIn() {
       // Handle redirect after login
       const searchParams = new URLSearchParams(location.search);
       const redirect = searchParams.get("redirect");
-      const finalRedirect = redirect && redirect !== "null" && redirect !== "undefined"? redirect : "/dashboards/home";
+      const finalRedirect =
+  redirect && redirect !== "null" && redirect !== "undefined"
+    ? redirect
+    : "/dashboards/home";
       navigate(finalRedirect, { replace: true });
 
 

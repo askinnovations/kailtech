@@ -2,24 +2,51 @@ import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { Button, Input } from "components/ui";
 import { Page } from "components/shared/Page";
+import axios from "utils/axios";
 
 export default function EditUnitType() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [unitType, setUnitType] = useState({ unitName: "", description: "" });
 
+// ✅ Fetch existing unit data
   useEffect(() => {
-    // TODO: fetch data by ID
-    console.log("Fetching unit type with ID:", id);
-    setUnitType({ unitName: "Voltage", description: "Voltage Unit" });
+    const fetchUnitType = async () => {
+      try {
+        const response = await axios.get(`/master/get-unit-type-byid/${id}`);
+        const data = response.data;
+
+        setUnitType({
+          unitName: data.name || "",
+          description: data.description || "",
+        });
+      } catch (err) {
+        console.error("Failed to fetch unit type:", err);
+        alert("Failed to load unit type.");
+      }
+    };
+
+    fetchUnitType();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  // ✅ Submit updated data
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // API call to update
-    console.log("Updating unit type:", id);
-    navigate("/dashboards/master-data/unit-types");
+
+    try {
+      const form = new FormData();
+      form.append("name", unitType.unitName);
+      form.append("description", unitType.description);
+
+      await axios.post(`/master/update-unit-type/${id}`, form);
+
+      navigate("/dashboards/master-data/unit-types");
+    } catch (err) {
+      console.error("Failed to update unit type:", err);
+      alert("Update failed. Please try again.");
+    }
   };
+
 
   return (
     <Page title="Edit Unit Type">

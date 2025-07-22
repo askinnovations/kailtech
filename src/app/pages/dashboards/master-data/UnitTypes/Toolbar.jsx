@@ -18,12 +18,10 @@ export function Toolbar({ table }) {
 
   return (
     <div className="table-toolbar">
-      <div
-        className={clsx(
+      <div className={clsx(
           "transition-content flex items-center justify-between gap-4",
           isFullScreenEnabled ? "px-4 sm:px-5" : "px-(--margin-x) pt-4",
-        )}
-      >
+        )}>
       
         {/*  */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">

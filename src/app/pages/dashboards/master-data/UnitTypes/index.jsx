@@ -10,7 +10,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect  } from "react";
+import axios from "utils/axios";
 
 // Local Imports
 import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
@@ -21,7 +22,7 @@ import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
-import { ordersList } from "./data";
+// import { ordersList } from "./data";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
@@ -34,12 +35,27 @@ const isSafari = getUserAgentBrowser() === "Safari";
 export default function OrdersDatatableV1() {
   const { cardSkin } = useThemeContext();
 
-  const [orders, setOrders] = useState([...ordersList]);
+  const [orders, setOrders] = useState([]);
 
-  const [tableSettings, setTableSettings] = useState({
+    // ✅ Fetch from API
+      useEffect(() => {
+        fetchUnitTypes();
+      }, []);
+
+      const fetchUnitTypes = async () => {
+        try {
+          const response = await axios.get("/master/unit-type-list");
+          setOrders(response.data); // ✅ If response is nested, use response.data.data
+        } catch (err) {
+          console.error("Error fetching unit types:", err);
+        }
+      };
+
+      const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
     enableRowDense: false,
   });
+
 
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -142,8 +158,7 @@ export default function OrdersDatatableV1() {
                 : "px-(--margin-x)",
             )}
           >
-            <Card
-              className={clsx(
+            <Card className={clsx(
                 "relative flex grow flex-col",
                 tableSettings.enableFullScreen && "overflow-hidden",
               )}
