@@ -47,7 +47,7 @@ export default function SignIn() {
       const searchParams = new URLSearchParams(location.search);
       const redirect = searchParams.get("redirect");
       const finalRedirect =
-  redirect && redirect !== "null" && redirect !== "undefined"
+       redirect && redirect !== "null" && redirect !== "undefined"
     ? redirect
     : "/dashboards/home";
       navigate(finalRedirect, { replace: true });

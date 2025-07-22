@@ -21,7 +21,7 @@ import PropTypes from "prop-types";
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
 import axios from "utils/axios";
-
+import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
 // ----------------------------------------------------------------------
@@ -29,10 +29,10 @@ import { useNavigate } from "react-router";
 const confirmMessages = {
   pending: {
     description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
+      "Are you sure you want to delete this UnitType? Once deleted, it cannot be restored.",
   },
   success: {
-    title: "Order Deleted",
+    title: "Unit Type Deleted",
   },
 };
 
@@ -68,9 +68,16 @@ export function RowActions({ row, table }) {
     await axios.delete(`/master/delete-unit-type/${id}`);
     table.options.meta?.deleteRow(row); // remove row from UI
     setDeleteSuccess(true);
+     toast.success("Unit type deleted successfully ✅", {
+      duration: 1000,
+      icon: "🗑️",
+    });
   } catch (error) {
     console.error("Delete failed:", error);
     setDeleteError(true);
+     toast.error("Failed to delete unit type ❌", {
+      duration: 2000,
+    });
   } finally {
     setConfirmDeleteLoading(false);
   }

@@ -36,6 +36,8 @@ export default function OrdersDatatableV1() {
   const { cardSkin } = useThemeContext();
 
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true); 
+
 
     // ✅ Fetch from API
       useEffect(() => {
@@ -44,17 +46,27 @@ export default function OrdersDatatableV1() {
 
       const fetchUnitTypes = async () => {
         try {
+          setLoading(true); // start loader
           const response = await axios.get("/master/unit-type-list");
-          setOrders(response.data); // ✅ If response is nested, use response.data.data
+
+            if (response.data.status && Array.isArray(response.data.data)) {
+              setOrders(response.data.data); // ✅ correct assignment
+            } else {
+              console.warn("Unexpected response structure:", response.data);
+              setOrders([]); // fallback
+            }
         } catch (err) {
           console.error("Error fetching unit types:", err);
+        }
+        finally {
+          setLoading(false); // stop loader
         }
       };
 
       const [tableSettings, setTableSettings] = useState({
-    enableFullScreen: false,
-    enableRowDense: false,
-  });
+        enableFullScreen: false,
+        enableRowDense: false,
+      });
 
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -138,6 +150,23 @@ export default function OrdersDatatableV1() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
+
+
+  // ✅ Loading UI
+  if (loading) {
+    return (
+      <Page title="Unit Types List">
+        <div className="flex h-[60vh] items-center justify-center text-gray-600">
+          <svg className="animate-spin h-6 w-6 mr-2 text-blue-600" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 000 8v4a8 8 0 01-8-8z"></path>
+          </svg>
+          Loading unit types...
+        </div>
+      </Page>
+    );
+  }
+  
 
   return (
     <Page title="Unit Types List">

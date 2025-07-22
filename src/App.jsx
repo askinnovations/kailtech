@@ -7,6 +7,7 @@ import { useAuthContext } from "app/contexts/auth/context";
 import { RouterProvider } from "react-router";
 import router from "app/router/router";
 
+
 // ✅ Step 1: Wrapper that waits for auth to be initialized
 function AppContent() {
   const { isInitialized } = useAuthContext();
@@ -31,6 +32,7 @@ function App() {
           <BreakpointProvider>
             <SidebarProvider>
               <AppContent />
+              
             </SidebarProvider>
           </BreakpointProvider>
         </LocaleProvider>

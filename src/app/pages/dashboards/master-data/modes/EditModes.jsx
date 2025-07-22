@@ -5,27 +5,23 @@ import { Page } from "components/shared/Page";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function EditUnitType() {
+export default function EditModes() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const [unitType, setUnitType] = useState({
-    unitName: "",
-    description: "",
-  });
+  const [mode, setMode] = useState({ modeName: "", description: "" });
 
-  // ✅ Fetch existing unit data
   useEffect(() => {
-    const fetchUnitType = async () => {
+    const fetchModes = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/master/get-unit-type-byid/${id}`);
+        const response = await axios.get(`/master/mode-byid/${id}`);
         const result = response.data;
 
         if (result.status === "true" && result.data) {
-          setUnitType({
-            unitName: result.data.name || "",
+          setMode({
+            modeName: result.data.name || "",
             description: result.data.description || "",
           });
         } else {
@@ -39,20 +35,20 @@ export default function EditUnitType() {
       }
     };
 
-    fetchUnitType();
+    fetchModes();
   }, [id]);
 
-  // ✅ Submit updated data
+  // ✅ Update mode
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    try {
+    // 
+  try {
       const form = new FormData();
-      form.append("name", unitType.unitName);
-      form.append("description", unitType.description);
+      form.append("name", mode.modeName);
+      form.append("description",mode.description);
 
-      const response = await axios.post(`/master/update-unit-type/${id}`, form);
+      const response = await axios.post(`/master/mode-update/${id}`, form);
       const result = response.data;
 
       if (result.status === "true") {
@@ -61,7 +57,7 @@ export default function EditUnitType() {
           icon: "✅",
         });
 
-        navigate("/dashboards/master-data/unit-types");
+        navigate("/dashboards/master-data/modes");
       } else {
         toast.error(result.message || "Failed to update unit type ❌");
       }
@@ -74,34 +70,25 @@ export default function EditUnitType() {
   };
 
   return (
-    <Page title="Edit Unit Type">
+    <Page title="Edit Mode">
       <div className="p-6">
-        <h2 className="text-lg font-semibold mb-4">
-          Edit Unit Type / Parameter
-        </h2>
+        <h2 className="text-lg font-semibold mb-4">Edit Mode</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Unit Name"
-            value={unitType.unitName}
-            onChange={(e) =>
-              setUnitType({ ...unitType, unitName: e.target.value })
-            }
+            label="Mode Name"
+            value={mode.modeName}
+            onChange={(e) => setMode({ ...mode, modeName: e.target.value })}
             required
           />
           <Input
             label="Description"
-            value={unitType.description}
-            onChange={(e) =>
-              setUnitType({ ...unitType, description: e.target.value })
-            }
+            value={mode.description}
+            onChange={(e) => setMode({ ...mode, description: e.target.value })}
           />
           <Button type="submit" color="primary" disabled={loading}>
             {loading ? (
               <div className="flex items-center gap-2">
-                <svg
-                  className="animate-spin h-4 w-4 text-white"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
                   <circle
                     className="opacity-25"
                     cx="12"

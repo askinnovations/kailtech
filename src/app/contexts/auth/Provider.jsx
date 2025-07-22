@@ -184,12 +184,8 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userPermissions");
     localStorage.removeItem("user");
-
-    // ✅ Clean URL BEFORE AuthGuard can read stale path
-    window.history.replaceState({}, document.title, "/login");
-
-    // ✅ Now logout from context
-    dispatch({ type: "LOGOUT" });
+    window.history.replaceState({}, document.title, "/login"); // ✅ Clean URL BEFORE AuthGuard can read stale path
+    dispatch({ type: "LOGOUT" }); // ✅ Now logout from context
 
     // ✅ Reload the app to prevent stale route re-capture
     window.location.href = "/login?redirect="; // final clean reset

@@ -143,7 +143,7 @@ const protectedRoutes = {
                 },
                 // UnitTypes
                 // modes
-              
+                
                 // ✅ Modes Routes (same pattern)
                   {
                     path: "modes",
@@ -160,12 +160,12 @@ const protectedRoutes = {
                           Component: (await import("app/pages/dashboards/master-data/Modes/AddModes")).default,
                         }),
                       },
-                      // {
-                      //   path: "edit/:id", // ✅ Edit page: /master-data/modes/edit/1
-                      //   lazy: async () => ({
-                      //     Component: (await import("app/pages/dashboards/master-data/Modes/EditModes")).default,
-                      //   }),
-                      // },
+                      {
+                        path: "edit/:id", // ✅ Edit page: /master-data/modes/edit/1
+                        lazy: async () => ({
+                          Component: (await import("app/pages/dashboards/master-data/Modes/EditModes")).default,
+                        }),
+                      },
                     ],
                   },
                 {
