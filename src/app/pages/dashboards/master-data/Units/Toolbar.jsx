@@ -49,12 +49,12 @@ export function Toolbar({ table }) {
           {/* Button */}
           <div>
             <Button
-  onClick={() => navigate("/dashboards/master-data/units/create")}
-  className="h-9 rounded-md px-4 text-sm font-medium"
-  color="primary"
->
-  + Add New Unit
-</Button>
+          onClick={() => navigate("/dashboards/master-data/units/create")}
+          className="h-9 rounded-md px-4 text-sm font-medium"
+          color="primary"
+        >
+          + Add New Unit
+        </Button>
 
           </div>
         </div>

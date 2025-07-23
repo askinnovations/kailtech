@@ -5,98 +5,102 @@ import { Page } from "components/shared/Page";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function EditModes() {
+export default function EditVertical() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const [mode, setMode] = useState({ modeName: "", description: "" });
+  const [vertical, setVertical] = useState({ name: "", code: "" });
 
   useEffect(() => {
-    const fetchModes = async () => {
+    const fetchVertical = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/master/mode-byid/${id}`);
+        const response = await axios.get(`/master/get-vertical-byid/${id}`);
         const result = response.data;
 
-        if (result.status === "true" && result.data) {
-          setMode({
-            modeName: result.data.name || "",
-            description: result.data.description || "",
-          });
-        } else {
-          toast.error(result.message || "Failed to load unit type.");
+      if (result.status === "true" && Array.isArray(result.data) && result.data.length > 0) {
+        const taxSlab = result.data[0];
+        setVertical({
+          name: taxSlab.name || "",
+          code: taxSlab.code || "",
+          
+        });
+      } else {
+          toast.error(result.message || "Failed to load vertical.");
         }
       } catch (err) {
         console.error("Fetch error:", err);
-        toast.error("Something went wrong while loading data.");
+        toast.error("Something went wrong while loading vertical.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchModes();
+    fetchVertical();
   }, [id]);
 
-  // ✅ Update mode
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // 
-  try {
-      const form = new FormData();
-      form.append("name", mode.modeName);
-      form.append("description",mode.description);
 
-      const response = await axios.post(`/master/mode-update/${id}`, form);
+    try {
+      const form = new FormData();
+      form.append("name", vertical.name);
+      form.append("code", vertical.code);
+
+      const response = await axios.post(`/master/update-vertical/${id}`, form);
       const result = response.data;
 
       if (result.status === "true") {
-        toast.success(result.message || "Unit type updated successfully ✅", {
+        toast.success(result.message || "Vertical updated successfully ✅", {
           duration: 1000,
           icon: "✅",
         });
-
-        navigate("/dashboards/master-data/modes");
+        navigate("/dashboards/master-data/verticals");
       } else {
-        toast.error(result.message || "Failed to update unit type ❌");
+        toast.error(result.message || "Failed to update vertical ❌");
       }
     } catch (err) {
       console.error("Update error:", err);
-      toast.error("Something went wrong while updating.");
+      toast.error("Something went wrong while updating vertical.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Page title="Edit Mode">
+    <Page title="Edit Vertical">
       <div className="p-6">
-                {/* ✅ Header + Back Button */}
+        {/* ✅ Header + Back Button */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Edit Modes
+            Edit Vertical
           </h2>
           <Button
             variant="outline"
             className="text-white bg-blue-600 hover:bg-blue-700"
-            onClick={() => navigate("/dashboards/master-data/modes")}
+            onClick={() => navigate("/dashboards/master-data/verticals")}
           >
-            Back to Modes
+            Back to List
           </Button>
         </div>
+
+        {/* ✅ Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Mode Name"
-            value={mode.modeName}
-            onChange={(e) => setMode({ ...mode, modeName: e.target.value })}
+            label="Vertical Name"
+            value={vertical.name}
+            onChange={(e) => setVertical({ ...vertical, name: e.target.value })}
             required
           />
           <Input
-            label="Description"
-            value={mode.description}
-            onChange={(e) => setMode({ ...mode, description: e.target.value })}
+            label="Code"
+            value={vertical.code}
+            onChange={(e) => setVertical({ ...vertical, code: e.target.value })}
+            required
           />
+
           <Button type="submit" color="primary" disabled={loading}>
             {loading ? (
               <div className="flex items-center gap-2">

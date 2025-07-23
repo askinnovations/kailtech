@@ -4,7 +4,7 @@ import PersonalChartIcon from 'assets/nav-icons/personal-chart.svg?react'
 import Statistic2Icon from 'assets/nav-icons/statistic-2.svg?react'
 import MegaphoneIcon from 'assets/nav-icons/megaphone.svg?react'
 import BankBuildIcon from 'assets/nav-icons/bank-build.svg?react'
-// import WindowIcon from 'assets/nav-icons/window.svg?react'
+import WindowIcon from 'assets/nav-icons/window.svg?react'
 import MapIcon from 'assets/nav-icons/map.svg?react'
 import StudentIcon from 'assets/nav-icons/student.svg?react'
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react'
@@ -35,7 +35,7 @@ export const dashboards = {
     childs: [
         {
             id: 'dashboards.home',
-            path: path(ROOT_DASHBOARDS, '/sales'),
+            path: path(ROOT_DASHBOARDS, '/home'),
             type: NAV_TYPE_ITEM,
             title: 'Dashboards',
             transKey: 'nav.dashboards.home',
@@ -47,7 +47,7 @@ export const dashboards = {
         type: NAV_TYPE_COLLAPSE,
         title: 'Material List',
         transKey: 'nav.dashboards.material-list',
-        Icon: BtcIcon,
+        Icon: WindowIcon,
         childs: [
         {
         id: 'dashboards.electro-technical',
@@ -183,7 +183,7 @@ export const dashboards = {
         type: NAV_TYPE_COLLAPSE,
         title: 'Master Data',
         transKey: 'nav.dashboards.master-data',
-        Icon: HomeIcon, // change icon as needed
+        Icon: HooksIcon, 
         childs: [
             {
             id: 'dashboards.unit-types',

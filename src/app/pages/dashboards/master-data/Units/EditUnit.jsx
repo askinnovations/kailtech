@@ -5,61 +5,70 @@ import { Page } from "components/shared/Page";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function EditModes() {
+export default function EditUnit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const [mode, setMode] = useState({ modeName: "", description: "" });
+  const [unit, setUnit] = useState({
+    name: "",
+    description: "",
+  });
 
   useEffect(() => {
-    const fetchModes = async () => {
+    const fetchUnit = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/master/mode-byid/${id}`);
+        const response = await axios.get(`/master/get-unit-byid/${id}`); // ✅ updated endpoint
         const result = response.data;
 
         if (result.status === "true" && result.data) {
-          setMode({
-            modeName: result.data.name || "",
+          setUnit({
+            name: result.data.name || "",
             description: result.data.description || "",
           });
         } else {
-          toast.error(result.message || "Failed to load unit type.");
+          toast.error(result.message || "Failed to load unit data.");
         }
       } catch (err) {
         console.error("Fetch error:", err);
-        toast.error("Something went wrong while loading data.");
+        toast.error("Something went wrong while loading unit.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchModes();
+    fetchUnit();
   }, [id]);
 
-  // ✅ Update mode
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUnit((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // 
-  try {
-      const form = new FormData();
-      form.append("name", mode.modeName);
-      form.append("description",mode.description);
 
-      const response = await axios.post(`/master/mode-update/${id}`, form);
+    try {
+      const form = new FormData();
+      form.append("name", unit.name);
+      form.append("description", unit.description);
+
+      const response = await axios.post(`/master/update-unit/${id}`, form); // ✅ updated endpoint
       const result = response.data;
 
       if (result.status === "true") {
-        toast.success(result.message || "Unit type updated successfully ✅", {
+        toast.success("Unit updated successfully ✅", {
           duration: 1000,
           icon: "✅",
         });
-
-        navigate("/dashboards/master-data/modes");
+        navigate("/dashboards/master-data/units");
       } else {
-        toast.error(result.message || "Failed to update unit type ❌");
+        toast.error(result.message || "Failed to update unit ❌");
       }
     } catch (err) {
       console.error("Update error:", err);
@@ -70,37 +79,44 @@ export default function EditModes() {
   };
 
   return (
-    <Page title="Edit Mode">
+    <Page title="Edit Unit">
       <div className="p-6">
-                {/* ✅ Header + Back Button */}
+        {/* Header + Back Button */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Edit Modes
+            Edit Unit
           </h2>
           <Button
             variant="outline"
             className="text-white bg-blue-600 hover:bg-blue-700"
-            onClick={() => navigate("/dashboards/master-data/modes")}
+            onClick={() => navigate("/dashboards/master-data/units")}
           >
-            Back to Modes
+            Back to List
           </Button>
         </div>
+
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Mode Name"
-            value={mode.modeName}
-            onChange={(e) => setMode({ ...mode, modeName: e.target.value })}
+            label="Unit Name"
+            name="name"
+            value={unit.name}
+            onChange={handleChange}
             required
           />
           <Input
             label="Description"
-            value={mode.description}
-            onChange={(e) => setMode({ ...mode, description: e.target.value })}
+            name="description"
+            value={unit.description}
+            onChange={handleChange}
           />
           <Button type="submit" color="primary" disabled={loading}>
             {loading ? (
               <div className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                <svg
+                  className="animate-spin h-4 w-4 text-white"
+                  viewBox="0 0 24 24"
+                >
                   <circle
                     className="opacity-25"
                     cx="12"

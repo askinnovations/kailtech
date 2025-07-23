@@ -72,13 +72,21 @@ export default function EditUnitType() {
       setLoading(false);
     }
   };
-
   return (
     <Page title="Edit Unit Type">
+  
+        
       <div className="p-6">
-        <h2 className="text-lg font-semibold mb-4">
-          Edit Unit Type / Parameter
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold">  Edit Unit Type / Parameter</h2>
+          <Button
+            variant="outline" className="text-white bg-blue-600 hover:bg-blue-700"
+            onClick={() => navigate("/dashboards/master-data/unit-types")}>
+              Edit Unit Type / Parameter
+          </Button>
+        </div>
+        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Unit Name"

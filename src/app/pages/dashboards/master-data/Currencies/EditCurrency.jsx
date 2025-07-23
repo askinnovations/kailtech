@@ -5,7 +5,7 @@ import { Page } from "components/shared/Page";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function EditModes() {
+export default function EditCurrency() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -13,10 +13,10 @@ export default function EditModes() {
   const [mode, setMode] = useState({ modeName: "", description: "" });
 
   useEffect(() => {
-    const fetchModes = async () => {
+    const fetchEditCurrency = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/master/mode-byid/${id}`);
+        const response = await axios.get(`/master/currency-byid/${id}`);
         const result = response.data;
 
         if (result.status === "true" && result.data) {
@@ -35,7 +35,7 @@ export default function EditModes() {
       }
     };
 
-    fetchModes();
+    fetchEditCurrency();
   }, [id]);
 
   // ✅ Update mode
@@ -48,7 +48,7 @@ export default function EditModes() {
       form.append("name", mode.modeName);
       form.append("description",mode.description);
 
-      const response = await axios.post(`/master/mode-update/${id}`, form);
+      const response = await axios.post(`/master/currency-update/${id}`, form);
       const result = response.data;
 
       if (result.status === "true") {
@@ -57,7 +57,7 @@ export default function EditModes() {
           icon: "✅",
         });
 
-        navigate("/dashboards/master-data/modes");
+        navigate("/dashboards/master-data/currencies");
       } else {
         toast.error(result.message || "Failed to update unit type ❌");
       }
@@ -75,19 +75,19 @@ export default function EditModes() {
                 {/* ✅ Header + Back Button */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Edit Modes
+            Edit Currency
           </h2>
           <Button
             variant="outline"
             className="text-white bg-blue-600 hover:bg-blue-700"
-            onClick={() => navigate("/dashboards/master-data/modes")}
+            onClick={() => navigate("/dashboards/master-data/currencies")}
           >
-            Back to Modes
+            Back to Currency
           </Button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Mode Name"
+            label="Name"
             value={mode.modeName}
             onChange={(e) => setMode({ ...mode, modeName: e.target.value })}
             required

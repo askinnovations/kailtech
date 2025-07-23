@@ -34,7 +34,7 @@ const confirmMessages = {
       "Are you sure you want to delete this modes? Once deleted, it cannot be restored.",
   },
   success: {
-    title: "Order Deleted",
+    title: "modes Deleted",
   },
 };
 

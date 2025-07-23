@@ -10,7 +10,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "utils/axios";
 
 // Local Imports
 import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
@@ -21,7 +22,7 @@ import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
-import { ordersList } from "./data";
+// import { ordersList } from "./data";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
@@ -34,7 +35,36 @@ const isSafari = getUserAgentBrowser() === "Safari";
 export default function OrdersDatatableV1() {
   const { cardSkin } = useThemeContext();
 
-  const [orders, setOrders] = useState([...ordersList]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  // ✅ Fetch from API
+    useEffect(() => {
+      fetchTaxSlabs();
+    }, []);
+
+  const fetchTaxSlabs = async () => {
+    try {
+      setLoading(true); // start loader
+      const response = await axios.get("/master/get-taxslab-list");
+      
+      // console.log("API response:", response.data); // debug
+  
+      if (response.data.status && Array.isArray(response.data.data)) {
+        setOrders(response.data.data); // ✅ correct assignment
+      } else {
+        console.warn("Unexpected response structure:", response.data);
+        setOrders([]); // fallback
+      }
+  
+    } catch (err) {
+      console.error("Error fetching mode list:", err);
+    } finally {
+      setLoading(false); // stop loader
+    }
+  };
+
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -67,9 +97,8 @@ export default function OrdersDatatableV1() {
       columnPinning,
       tableSettings,
     },
-    meta: {
+      meta: {
       updateData: (rowIndex, columnId, value) => {
-        // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
         setOrders((old) =>
           old.map((row, index) => {
@@ -80,23 +109,21 @@ export default function OrdersDatatableV1() {
               };
             }
             return row;
-          }),
+          })
         );
       },
       deleteRow: (row) => {
-        // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
         setOrders((old) =>
-          old.filter((oldRow) => oldRow.order_id !== row.original.order_id),
+          old.filter((oldRow) => oldRow.id !== row.original.id)
         );
       },
       deleteRows: (rows) => {
-        // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
-        const rowIds = rows.map((row) => row.original.order_id);
-        setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
+        const rowIds = rows.map((row) => row.original.id);
+        setOrders((old) => old.filter((row) => !rowIds.includes(row.id)));
       },
-      setTableSettings,
+      setTableSettings
     },
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -122,6 +149,21 @@ export default function OrdersDatatableV1() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
+
+  // ✅ Loading UI
+  if (loading) {
+    return (
+      <Page title="tax slab">
+        <div className="flex h-[60vh] items-center justify-center text-gray-600">
+          <svg className="animate-spin h-6 w-6 mr-2 text-blue-600" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 000 8v4a8 8 0 01-8-8z"></path>
+          </svg>
+          Loading Modes...
+        </div>
+      </Page>
+    );
+  }
 
   return (
     <Page title="tax Slabs">

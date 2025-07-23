@@ -183,12 +183,12 @@ const protectedRoutes = {
                         Component: (await import("app/pages/dashboards/master-data/TaxSlabs/AddTaxSlab")).default,
                       }),
                     },
-                    // {
-                    //   path: "edit/:id", // Edit page
-                    //   lazy: async () => ({
-                    //     Component: (await import("app/pages/dashboards/master-data/TaxSlabs/EditTaxSlab")).default,
-                    //   }),
-                    // },
+                    {
+                      path: "edit/:id", // Edit page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/TaxSlabs/EditTaxSlab")).default,
+                      }),
+                    },
                   ],
                 },
 
@@ -207,12 +207,12 @@ const protectedRoutes = {
                       Component: (await import("app/pages/dashboards/master-data/Verticals/AddVertical")).default,
                     }),
                   },
-                  // {
-                  //   path: "edit/:id", // Edit page
-                  //   lazy: async () => ({
-                  //     Component: (await import("app/pages/dashboards/master-data/Verticals/EditVertical")).default,
-                  //   }),
-                  // },
+                  {
+                    path: "edit/:id", // Edit page
+                    lazy: async () => ({
+                      Component: (await import("app/pages/dashboards/master-data/Verticals/EditVertical")).default,
+                    }),
+                  },
                 ],
               },
 
@@ -237,12 +237,12 @@ const protectedRoutes = {
                         Component: (await import("app/pages/dashboards/master-data/Currencies/AddCurrency")).default,
                       }),
                     },
-                    // {
-                    //   path: "edit/:id", // ✅ Edit Currency Page
-                    //   lazy: async () => ({
-                    //     Component: (await import("app/pages/dashboards/master-data/Currencies/EditCurrency")).default,
-                    //   }),
-                    // },
+                    {
+                      path: "edit/:id", // ✅ Edit Currency Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/Currencies/EditCurrency")).default,
+                      }),
+                    },
                   ],
                 },
 
@@ -261,12 +261,12 @@ const protectedRoutes = {
                         Component: (await import("app/pages/dashboards/master-data/Units/AddUnit")).default,
                       }),
                     },
-                    // {
-                    //   path: "edit/:id", // ✅ Edit Page
-                    //   lazy: async () => ({
-                    //     Component: (await import("app/pages/dashboards/master-data/Units/EditUnit")).default,
-                    //   }),
-                    // },
+                    {
+                      path: "edit/:id", // ✅ Edit Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/Units/EditUnit")).default,
+                      }),
+                    },
                   ],
                 },
 
@@ -284,10 +284,29 @@ const protectedRoutes = {
                 // },
                 {
                   path: "manage-labs",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/master-data/ManageLabs")).default,
-                  }),
+                  children: [
+                    {
+                      index: true,
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/ManageLabs")).default,
+                      }),
+                    },
+                    {
+                      path: "create",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/ManageLabs/AddLab")).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/master-data/ManageLabs/EditLab")).default,
+                      }),
+                    },
+                  ],
                 },
+
+
                 // {
                 //   path: "activity-log",
                 //   lazy: async () => ({

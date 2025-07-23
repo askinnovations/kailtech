@@ -14,7 +14,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
-
+import { useNavigate } from "react-router";
 
 
 import { Button, Input } from "components/ui";
@@ -27,7 +27,7 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 export function Toolbar({ table }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-
+ const navigate = useNavigate(); 
   return (
     <div className="table-toolbar">
       <div
@@ -41,18 +41,20 @@ export function Toolbar({ table }) {
           {/* Heading */}
           <div className="min-w-0">
             <h2 className="text-xl font-semibold tracking-wide text-gray-800 dark:text-dark-50">
-            ManageLabs List
+            Manage Labs List
             </h2>
           </div>
 
           {/* Button */}
           <div>
-            <Button
-              className="h-9 rounded-md px-4 text-sm font-medium"
-              color="primary"
-            >
-              + Add ManageLabs
-            </Button>
+          <Button
+            onClick={() => navigate("/dashboards/master-data/manage-labs/create")}
+            className="h-9 rounded-md px-4 text-sm font-medium"
+            color="primary"
+          >
+            + Add Manage Labs
+          </Button>
+
           </div>
         </div>
 

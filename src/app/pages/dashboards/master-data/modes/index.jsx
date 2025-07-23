@@ -96,37 +96,34 @@ export default function OrdersDatatableV1() {
       columnPinning,
       tableSettings,
     },
-    meta: {
-      updateData: (rowIndex, columnId, value) => {
-        // Skip page index reset until after next rerender
-        skipAutoResetPageIndex();
-        setOrders((old) =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex],
-                [columnId]: value,
-              };
-            }
-            return row;
-          }),
-        );
-      },
-      deleteRow: (row) => {
-        // Skip page index reset until after next rerender
-        skipAutoResetPageIndex();
-        setOrders((old) =>
-          old.filter((oldRow) => oldRow.order_id !== row.original.order_id),
-        );
-      },
-      deleteRows: (rows) => {
-        // Skip page index reset until after next rerender
-        skipAutoResetPageIndex();
-        const rowIds = rows.map((row) => row.original.order_id);
-        setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
-      },
-      setTableSettings,
-    },
+        meta: {
+  updateData: (rowIndex, columnId, value) => {
+    skipAutoResetPageIndex();
+    setOrders((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          };
+        }
+        return row;
+      })
+    );
+  },
+  deleteRow: (row) => {
+    skipAutoResetPageIndex();
+    setOrders((old) =>
+      old.filter((oldRow) => oldRow.id !== row.original.id)
+    );
+  },
+  deleteRows: (rows) => {
+    skipAutoResetPageIndex();
+    const rowIds = rows.map((row) => row.original.id);
+    setOrders((old) => old.filter((row) => !rowIds.includes(row.id)));
+  },
+  setTableSettings
+},
     filterFns: {
       fuzzy: fuzzyFilter,
     },

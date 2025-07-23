@@ -5,27 +5,34 @@ import { Page } from "components/shared/Page";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function EditModes() {
+export default function EditTaxSlab() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const [mode, setMode] = useState({ modeName: "", description: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    percentage: "",
+  });
 
   useEffect(() => {
-    const fetchModes = async () => {
+    const fetchTaxSlab = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/master/mode-byid/${id}`);
+        const response = await axios.get(`master/get-taxslab-byid/${id}`);
         const result = response.data;
+        console.log(result);
 
-        if (result.status === "true" && result.data) {
-          setMode({
-            modeName: result.data.name || "",
-            description: result.data.description || "",
-          });
-        } else {
-          toast.error(result.message || "Failed to load unit type.");
+              if (result.status === "true" && Array.isArray(result.data) && result.data.length > 0) {
+        const taxSlab = result.data[0];
+        setFormData({
+          name: taxSlab.name || "",
+          description: taxSlab.description || "",
+          percentage: taxSlab.percentage || "",
+        });
+      } else {
+          toast.error(result.message || "Failed to load tax slab.");
         }
       } catch (err) {
         console.error("Fetch error:", err);
@@ -35,31 +42,31 @@ export default function EditModes() {
       }
     };
 
-    fetchModes();
+    fetchTaxSlab();
   }, [id]);
 
-  // ✅ Update mode
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // 
-  try {
-      const form = new FormData();
-      form.append("name", mode.modeName);
-      form.append("description",mode.description);
 
-      const response = await axios.post(`/master/mode-update/${id}`, form);
+    try {
+      const form = new FormData();
+      form.append("name", formData.name);
+      form.append("description", formData.description);
+      form.append("percentage", formData.percentage);
+
+      const response = await axios.post(`master/update-taxslab/${id}`, form);
       const result = response.data;
 
       if (result.status === "true") {
-        toast.success(result.message || "Unit type updated successfully ✅", {
+        toast.success(result.message || "Tax slab updated successfully ✅", {
           duration: 1000,
           icon: "✅",
         });
 
-        navigate("/dashboards/master-data/modes");
+        navigate("/dashboards/master-data/tax-slabs");
       } else {
-        toast.error(result.message || "Failed to update unit type ❌");
+        toast.error(result.message || "Failed to update tax slab ❌");
       }
     } catch (err) {
       console.error("Update error:", err);
@@ -70,33 +77,42 @@ export default function EditModes() {
   };
 
   return (
-    <Page title="Edit Mode">
+    <Page title="Edit Tax Slab">
       <div className="p-6">
-                {/* ✅ Header + Back Button */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Edit Modes
+            Edit Tax Slab
           </h2>
           <Button
             variant="outline"
             className="text-white bg-blue-600 hover:bg-blue-700"
-            onClick={() => navigate("/dashboards/master-data/modes")}
+            onClick={() => navigate("/dashboards/master-data/tax-slabs")}
           >
-            Back to Modes
+            Back to List
           </Button>
         </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Mode Name"
-            value={mode.modeName}
-            onChange={(e) => setMode({ ...mode, modeName: e.target.value })}
+            label="Tax Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+          <Input
+            label="Percentage"
+            type="number"
+            value={formData.percentage}
+            onChange={(e) => setFormData({ ...formData, percentage: e.target.value })}
             required
           />
           <Input
             label="Description"
-            value={mode.description}
-            onChange={(e) => setMode({ ...mode, description: e.target.value })}
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            required
           />
+
           <Button type="submit" color="primary" disabled={loading}>
             {loading ? (
               <div className="flex items-center gap-2">
