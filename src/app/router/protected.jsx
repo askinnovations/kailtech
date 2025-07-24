@@ -345,6 +345,12 @@ const protectedRoutes = {
                       Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards/AddCalibrationStandards")).default,
                     }),
                   },
+                  {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards/EditCalibrationStandards")).default,
+                      }),
+                    },
                 ],
               },
                 
@@ -361,6 +367,12 @@ const protectedRoutes = {
                       path: "add", // Add Page
                       lazy: async () => ({
                         Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods/AddCalibrationMethods")).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods/EditCalibrationMethods")).default,
                       }),
                     },
                   ],
@@ -424,31 +436,52 @@ const protectedRoutes = {
                     Component: (await import("app/pages/dashboards/people/customer-categories/AddCustomerCategory")).default,
                   }),
                 },
-
+                
                 {
                   path: "customer-types",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/customer-types")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/customer-types")).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/customer-types/AddCustomerType")).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/customer-types/EditCustomerType")).default,
+                      }),
+                    },
+                  ],
                 },
-                {
-                  path: "customer-types/add",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/customer-types/AddCustomerType")).default,
-                  }),
-                },
-
                 {
                   path: "specific-purposes",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/specific-purposes")).default,
-                  }),
-                },
-                {
-                  path: "specific-purposes/add",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/specific-purposes/AddSpecificPurpose")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/specific-purposes")).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/specific-purposes/AddSpecificPurpose")).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/specific-purposes/EditSpecificPurpose")).default,
+                      }),
+                    },
+                  ],
                 },
 
                 {

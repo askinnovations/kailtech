@@ -27,17 +27,9 @@ export const columns = [
   // ✅ Mode Name (from API)
   columnHelper.accessor("name", {
     id: "name",
-    header: "Unit Name",
+    header: "Name",
     cell: (info) => info.getValue(),
   }),
-
-  // ✅ Description (from API)
-  columnHelper.accessor("description", {
-    id: "description",
-    header: "Description",
-    cell: (info) => info.getValue(),
-  }),
-
   // ✅ Actions
   columnHelper.display({
     id: "actions",

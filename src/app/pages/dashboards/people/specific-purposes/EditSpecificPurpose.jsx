@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Page } from "components/shared/Page";
 import { Button, Input, Select, Textarea } from "components/ui";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function AddSpecificPurpose() {
+export default function EditSpecificPurpose() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [choices, setChoices] = useState([]);
@@ -20,30 +21,20 @@ export default function AddSpecificPurpose() {
     description: "",
   });
 
-  // ✅ Handles <Select /> component changes
-  const handleSelectChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  
 
-  // ✅ Handles <Input /> and <Textarea /> changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // ✅ Load dropdown options
+  // ✅ Fetch dropdowns + existing specific purpose
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [choicesRes, customerRes] = await Promise.all([
+        setLoading(true);
+        const [choicesRes, customerRes, dataRes] = await Promise.all([
           axios.get("/get-choices"),
           axios.get("/people/get-customer-type-list"),
+          axios.get(`/people/get-specific-purpose-byid/${id}`),
         ]);
 
+        // Dropdowns
         setChoices(
           (choicesRes.data?.data || []).map((item) => ({
             label: item.name,
@@ -57,16 +48,41 @@ export default function AddSpecificPurpose() {
             value: item.id.toString(),
           }))
         );
+
+        // Existing form data
+        const result = dataRes.data;
+        if (result.status === "true" && result.data) {
+          const item = result.data;
+          setFormData({
+            name: item.name || "",
+            ctype: item.ctype?.toString() || "",
+            parta: item.parta?.toString() || "",
+            partb: item.partb?.toString() || "",
+            remnant: item.remnant?.toString() || "",
+            description: item.description || "",
+          });
+        } else {
+          toast.error("Specific purpose data not found.");
+        }
+
       } catch (err) {
-        console.error("Error loading select data:", err.response || err);
-        toast.error("Failed to load dropdown data ❌");
+        console.error("Error loading data:", err);
+        toast.error("Failed to load data.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
-  // ✅ Submit form
+    const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+
+  // ✅ Submit updated form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -79,25 +95,27 @@ export default function AddSpecificPurpose() {
       form.append("remnant", formData.remnant);
       form.append("description", formData.description);
 
-      const res = await axios.post("/people/add-specific-purpose", form);
+      const res = await axios.post(`/people/update-specific-purpose/${id}`, form);
 
-      toast.success(res.data?.message || "Specific purpose added ✅");
-      navigate("/dashboards/people/specific-purposes");
+      if (res.data.status === "true") {
+        toast.success(res.data?.message || "Specific purpose updated ✅");
+        navigate("/dashboards/people/specific-purposes");
+      } else {
+        toast.error(res.data?.message || "Failed to update ❌");
+      }
     } catch (err) {
       console.error("Submit error:", err);
-      toast.error("Failed to submit ❌");
+      toast.error("Something went wrong ❌");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Page title="Add Specific Purpose">
+    <Page title="Edit Specific Purpose">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Add Specific Purpose
-          </h2>
+          <h2 className="text-lg font-semibold">Edit Specific Purpose</h2>
           <Button
             variant="outline"
             className="text-white bg-blue-600 hover:bg-blue-700"
@@ -120,27 +138,27 @@ export default function AddSpecificPurpose() {
           <Select
             name="ctype"
             label="Customer Type"
-            value={formData.ctype}
             data={customerTypes}
-            onChange={handleSelectChange}
+            value={formData.ctype}
+            onChange={handleChange}
             required
           />
 
           <Select
             name="parta"
             label="Is Part A Required?"
-            value={formData.parta}
             data={choices}
-            onChange={handleSelectChange}
+            value={formData.parta}
+            onChange={handleChange}
             required
           />
 
           <Select
             name="partb"
             label="Is Part B Required?"
-            value={formData.partb}
             data={choices}
-            onChange={handleSelectChange}
+            value={formData.partb}
+            onChange={handleChange}
             required
           />
 
@@ -164,7 +182,7 @@ export default function AddSpecificPurpose() {
           />
 
           <Button type="submit" color="primary" disabled={loading}>
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Updating..." : "Update"}
           </Button>
         </form>
       </div>

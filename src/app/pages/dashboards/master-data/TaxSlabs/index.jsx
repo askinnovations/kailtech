@@ -98,33 +98,34 @@ export default function OrdersDatatableV1() {
       tableSettings,
     },
       meta: {
-      updateData: (rowIndex, columnId, value) => {
-        skipAutoResetPageIndex();
-        setOrders((old) =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex],
-                [columnId]: value,
-              };
-            }
-            return row;
-          })
-        );
-      },
-      deleteRow: (row) => {
-        skipAutoResetPageIndex();
-        setOrders((old) =>
-          old.filter((oldRow) => oldRow.id !== row.original.id)
-        );
-      },
-      deleteRows: (rows) => {
-        skipAutoResetPageIndex();
-        const rowIds = rows.map((row) => row.original.id);
-        setOrders((old) => old.filter((row) => !rowIds.includes(row.id)));
-      },
-      setTableSettings
-    },
+  updateData: (rowIndex, columnId, value) => {
+    skipAutoResetPageIndex();
+    setOrders((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          };
+        }
+        return row;
+      })
+    );
+  },
+  deleteRow: (row) => {
+    skipAutoResetPageIndex();
+    setOrders((old) =>
+      old.filter((oldRow) => oldRow.id !== row.original.id)
+    );
+  },
+  deleteRows: (rows) => {
+    skipAutoResetPageIndex();
+    const rowIds = rows.map((row) => row.original.id);
+    setOrders((old) => old.filter((row) => !rowIds.includes(row.id)));
+  },
+  setTableSettings
+},
+
     filterFns: {
       fuzzy: fuzzyFilter,
     },
