@@ -175,22 +175,22 @@ export function AuthProvider({ children }) {
 };
 
     const logout = async () => {
-  try {
-    await axios.post("/logout");
-  } catch (error) {
-    console.error("Logout failed:", error);
-  } finally {
-    setSession(null);
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userPermissions");
-    localStorage.removeItem("user");
-    window.history.replaceState({}, document.title, "/login"); // ✅ Clean URL BEFORE AuthGuard can read stale path
-    dispatch({ type: "LOGOUT" }); // ✅ Now logout from context
-
-    // ✅ Reload the app to prevent stale route re-capture
-    window.location.href = "/login?redirect="; // final clean reset
-  }
-};
+      try {
+        await axios.post("/logout");
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        setSession(null);
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("userPermissions");
+        localStorage.removeItem("user");
+        window.history.replaceState({}, document.title, "/login"); // ✅ Clean URL BEFORE AuthGuard can read stale path
+        dispatch({ type: "LOGOUT" }); // ✅ Now logout from context
+      
+        // ✅ Reload the app to prevent stale route re-capture
+        // window.location.href = "/login?redirect="; // final clean reset
+      }
+    };
 
 
 

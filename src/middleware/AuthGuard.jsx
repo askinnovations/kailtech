@@ -16,7 +16,8 @@ export default function AuthGuard() {
   const redirectPath =
   location.pathname && location.pathname !== "/login" && location.pathname !== "/logout"
     ? location.pathname
-    : "";
+    : ""; 
+
 
   if (!isAuthenticated) {
     return (

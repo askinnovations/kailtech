@@ -27,7 +27,6 @@ export default function EditCustomer() {
     gstno: "",
     pan: "",
     discount: "",
-    sapua: "",
     thumb_image: null
   });
 
@@ -74,7 +73,6 @@ export default function EditCustomer() {
           gstno: customer.gstno || "",
           pan: customer.pan || "",
           discount: customer.discount || "",
-          sapua: customer.sapua || "",
           thumb_image: null
         });
       } catch (err) {
@@ -157,7 +155,7 @@ export default function EditCustomer() {
     <Page title="Edit Customer">
       <div className="p-6">
       <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Add Customer</h2>
+          <h2 className="text-lg font-semibold">Edit Customer</h2>
           <Button
             variant="outline"
             className="text-white bg-blue-600 hover:bg-blue-700"
@@ -171,7 +169,7 @@ export default function EditCustomer() {
           <Input label="Customer Name" name="name" value={formData.name} onChange={handleInputChange} required />
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Type</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Customer </label>
             <ReactSelect
               isMulti
               value={customerTypeOptions.filter((opt) => formData.customertype.includes(opt.value))}

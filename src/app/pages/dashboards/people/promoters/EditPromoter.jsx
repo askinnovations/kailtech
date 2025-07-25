@@ -26,40 +26,43 @@ export default function EditPromoter() {
   });
 
   useEffect(() => {
-    const fetchPromoter = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`/people/get-promoter/${id}`);
-        const result = response.data;
+  const fetchPromoter = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`/people/get-promoter/${id}`);
+      const result = response.data;
 
-        if (result.status === "true" && result.data) {
-          setFormData({
-            name: result.data.name || "",
-            mobile: result.data.mobile || "",
-            address: result.data.address || "",
-            pname: result.data.contact_person_name || "",
-            pnumber: result.data.contact_person_number || "",
-            email: result.data.email || "",
-            city: result.data.city || "",
-            state: result.data.state || "",
-            gstno: result.data.gst_no || "",
-            pan: result.data.pan_no || "",
-            discount: result.data.discount || "",
-            thumb_image: null,
-          });
-        } else {
-          toast.error(result.message || "Failed to load promoter data.");
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-        toast.error("Something went wrong while loading data.");
-      } finally {
-        setLoading(false);
+      if (result.status === "true" && result.data) {
+        const data = result.data;
+
+        setFormData({
+          name: data.name || "",
+          mobile: data.mobile || "",
+          address: data.address || "",
+          pname: data.pname || "", // ✅ from API
+          pnumber: data.pnumber || "", // ✅ from API
+          email: data.email || "",
+          city: data.city || "",
+          state: data.state || "",
+          gstno: data.gstno || "", // ✅ key is gstno not gst_no
+          pan: data.pan || "",
+          discount: data.discount?.toString() || "",
+          thumb_image: null, // Image upload is handled manually
+        });
+      } else {
+        toast.error(result.message || "Failed to load promoter data.");
       }
-    };
+    } catch (err) {
+      console.error("Fetch error:", err);
+      toast.error("Something went wrong while loading data.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPromoter();
-  }, [id]);
+  fetchPromoter();
+}, [id]);
+
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -70,36 +73,46 @@ export default function EditPromoter() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const form = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === "thumb_image" && value instanceof File) {
-          form.append(key, value);
-        } else {
-          form.append(key, value);
+  try {
+    const form = new FormData();
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "thumb_image") {
+        if (value && value instanceof File) {
+          const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
+          if (allowedTypes.includes(value.type)) {
+            form.append(key, value);
+          } else {
+            console.warn("Invalid image file type:", value.type);
+            toast.error("Only jpg, jpeg, png, gif images are allowed.");
+          }
         }
-      });
-
-      const response = await axios.post(`/people/update-promoter/${id}`, form);
-      const result = response.data;
-      console.log( response.data)
-
-      if (result.status === "true") {
-        toast.success(result.message || "Promoter updated successfully ✅");
-        navigate("/dashboards/people/promoters");
+        // ⚠️ don't append if value is not File (i.e. already uploaded or untouched)
       } else {
-        toast.error(result.message || "Failed to update promoter ❌");
+        form.append(key, value);
       }
-    } catch (err) {
-      console.error("Update error:", err);
-      toast.error("Something went wrong while updating.");
-    } finally {
-      setLoading(false);
+    });
+
+    const response = await axios.post(`/people/update-promoter/${id}`, form);
+    const result = response.data;
+
+    if (result.status === "true") {
+      toast.success(result.message || "Promoter updated successfully ✅");
+      navigate("/dashboards/people/promoters");
+    } else {
+      toast.error(result.message || "Failed to update promoter ❌");
     }
+  } catch (err) {
+    console.error("Update error:", err);
+    toast.error("Something went wrong while updating.");
+  } finally {
+    setLoading(false);
+  }
   };
+
 
   return (
     <Page title="Edit Promoter">

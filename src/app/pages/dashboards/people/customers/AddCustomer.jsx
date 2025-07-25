@@ -24,7 +24,6 @@ export default function AddCustomer() {
     gstno: "",
     pan: "",
     discount: "",
-    sapua: "",
     thumb_image: null
   });
 

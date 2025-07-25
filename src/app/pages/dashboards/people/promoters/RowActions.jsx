@@ -31,10 +31,10 @@ import { useNavigate } from "react-router";
 const confirmMessages = {
   pending: {
     description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
+      "Are you sure you want to delete this Promoters? Once deleted, it cannot be restored.",
   },
   success: {
-    title: "Order Deleted",
+    title: "Promoters Deleted",
   },
 };
 

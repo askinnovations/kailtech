@@ -14,7 +14,7 @@ import { Link } from "react-router";
 
 // Local Imports
 import { Avatar, AvatarDot, Button } from "components/ui";
-import { useNavigate } from "react-router"; // make sure it's "react-router-dom"
+// import { useNavigate } from "react-router"; // make sure it's "react-router-dom"
 // ----------------------------------------------------------------------
 import { useAuthContext } from "app/contexts/auth/context"; // ✅ import
 
@@ -31,14 +31,14 @@ const links = [
 ];
 
 export function Profile() {
-    const navigate = useNavigate(); 
-    const { logout, user } = useAuthContext(); // ✅
+    // const navigate = useNavigate(); 
+    const { logout, user } = useAuthContext(); 
 
 
   const handleLogout = async () => {
-    await logout(); // ✅ Call API and clear session
-  // ✅ Redirect user to root WITHOUT redirect param
-     navigate("/login?redirect=", { replace: true }); // ✅ no ?redirect http://localhost:5175/login?redirect=
+    await logout(); 
+    window.location.href = "/login?redirect=";
+    // navigate("/login?redirect=", { replace: true }); // ✅ blank redirect
   };
 
   return (

@@ -68,8 +68,8 @@ export function RowActions({ row, table }) {
   const id = row.original.id; // Assuming your row contains `id`
   setConfirmDeleteLoading(true);
 
-    try {
-      await axios.delete(`/people/delete-customer-type/${id}`);
+    try { 
+      await axios.delete(`/people/delete-customer/${id}`);
       table.options.meta?.deleteRow(row); // remove row from UI
       setDeleteSuccess(true);
       toast.success("Customer  deleted successfully ✅", {
