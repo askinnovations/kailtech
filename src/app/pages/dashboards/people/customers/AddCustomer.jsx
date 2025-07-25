@@ -36,29 +36,45 @@ export default function AddCustomer() {
 
   useEffect(() => {
     const fetchDropdowns = async () => {
-  try {
-    const [ctRes, pmRes, countryRes, stateRes] = await Promise.all([
-      axios.get("/people/get-customer-type-list"),
-      axios.get("/people/get-payment-mode"),
-      axios.get("/people/get-country"),
-      axios.get("/people/get-state"),
-    ]);
+      try {
+        const [ctRes, pmRes, countryRes, stateRes] = await Promise.all([
+          axios.get("/people/get-customer-type-list"),
+          axios.get("/people/get-payment-mode"),
+          axios.get("/people/get-country"),
+          axios.get("/people/get-state"),
+        ]);
 
-    const ctData = ctRes?.data?.data || [];
-    const pmData = pmRes?.data?.data || [];
-    const countryData = countryRes?.data?.data || [];
-    const stateData = stateRes?.data?.data || [];
+        console.log("Customer Types:", ctRes?.data);
+        console.log("Payment Modes:", pmRes?.data);
+        console.log("Countries:", countryRes?.data);
+        console.log("States:", stateRes?.data);
 
-    setCustomerTypeOptions(ctData.map((item) => ({ label: item.name, value: item.id })));
-    setPaymentModes(pmData.map((item) => ({ label: item.name, value: item.id })));
-    setCountries(countryData.map((item) => ({ label: item.name, value: item.id })));
-    setStates(stateData.map((item) => ({ label: item.name, value: item.id })));
-  } catch (err) {
-    toast.error("Error loading dropdown data");
-    console.error(err);
-  }
-};
+        // ✅ Fix: Correct response paths
+        const ctData = Array.isArray(ctRes?.data?.Data) ? ctRes.data.Data : [];
+        const pmData = Array.isArray(pmRes?.data?.data) ? pmRes.data.data : [];
+        const countryData = Array.isArray(countryRes?.data?.data) ? countryRes.data.data : [];
+        const stateData = Array.isArray(stateRes?.data?.data) ? stateRes.data.data : [];
 
+        // ✅ Mapping for dropdowns
+        setCustomerTypeOptions(
+          ctData.map((item) => ({ label: item.name, value: item.id }))
+        );
+        setPaymentModes(
+          pmData.map((item) => ({ label: item.name, value: item.id }))
+        );
+        setCountries(
+          countryData.map((item) => ({ label: item.name, value: item.id }))
+        );
+        
+        setStates(
+          stateData.map((item) => ({ label: item.state, value: item.id }))
+        );
+
+      } catch (err) {
+        toast.error("Error loading dropdown data");
+        console.error("Dropdown Fetch Error:", err);
+      }
+    };
 
     fetchDropdowns();
   }, []);

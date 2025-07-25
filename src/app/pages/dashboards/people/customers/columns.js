@@ -4,43 +4,38 @@ import { createColumnHelper } from "@tanstack/react-table";
 // Local Imports
 import { RowActions } from "./RowActions";
 import {
-    SelectCell,
-    SelectHeader,
+  SelectCell,
+  SelectHeader,
 } from "components/shared/table/SelectCheckbox";
-import {CustomerCell,TotalCell} from "./rows";
-
-// ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
-    columnHelper.display({
-        id: "select",
-        label: "Row Selection",
-        header: SelectHeader,
-        cell: SelectCell,
-    }),
-    columnHelper.accessor((_row, index) => index + 1, {
-        id: "s_no",
-        header: "S No",
-        cell: (info) => info.row.index + 1,
-    }),
-    columnHelper.accessor((row) => row.customer.name, {
-        id: "customer",
-        label: "Customer",
-        header: "Name",
-        cell: CustomerCell,
-    }),
-    columnHelper.accessor((row) => row.total, {
-        id: "total",
-        label: "Total",
-        header: "Mobile",
-        cell: TotalCell,
-    }),
-    columnHelper.display({
-        id: "actions",
-        label: "Row Actions",
-        header: "Actions",
-        cell: RowActions
-    }),
-]
+  columnHelper.display({
+    id: "select",
+    header: SelectHeader,
+    cell: SelectCell,
+  }),
+
+  // ✅ Serial Number
+  columnHelper.accessor((_row, index) => index + 1, {
+    id: "s_no",
+    header: "S No",
+    cell: (info) => info.row.index + 1,
+  }),
+
+  // ✅ Mode Name (from API)
+  columnHelper.accessor("name", {
+    id: "name",
+    header: "Customer Name",
+    cell: (info) => info.getValue(),
+  }),
+
+ 
+  // ✅ Actions
+  columnHelper.display({
+    id: "actions",
+    header: "Actions",
+    cell: RowActions,
+  }),
+];

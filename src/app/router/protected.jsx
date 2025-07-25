@@ -486,28 +486,51 @@ const protectedRoutes = {
 
                 {
                   path: "customers",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/customers")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/customers")).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/customers/AddCustomer")).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/customers/EditCustomer")).default,
+                      }),
+                    },
+                  ],
                 },
-                {
-                  path: "customers/add",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/customers/AddCustomer")).default,
-                  }),
-                },
+
 
                 {
                   path: "promoters",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/promoters")).default,
-                  }),
-                },
-                {
-                  path: "promoters/add",
-                  lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/promoters/AddPromoter")).default,
-                  }),
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/promoters")).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/promoters/AddPromoter")).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (await import("app/pages/dashboards/people/promoters/EditPromoter")).default,
+                      }),
+                    },
+                  ],
                 },
 
                 {
