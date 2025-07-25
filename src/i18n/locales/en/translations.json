@@ -143,7 +143,7 @@
       "environmental-condition": "Environmental Condition",
       "inventory": "Inventory",
       "categories": "Categories",
-      "product-type-subcategory": "Product Type/ Subcategory",
+      "subcategories": "Product Type/ Subcategory",
       "product-type-stock": "Product Type Stock",
       "purchase-requisition": "Purchase Requisition",
       "purchase-order": "Purchase Order",

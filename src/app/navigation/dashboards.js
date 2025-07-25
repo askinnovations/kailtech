@@ -1056,11 +1056,11 @@ export const dashboards = {
       transKey: 'nav.dashboards.categories',
     },
     {
-      id: 'dashboards.product-type-subcategory',
+      id: 'dashboards.subcategories',
       type: NAV_TYPE_ITEM,
-      path: path(ROOT_DASHBOARDS, '/inventory/product-type-subcategory'),
+      path: path(ROOT_DASHBOARDS, '/inventory/subcategories'),
       title: 'Product Type/ Subcategory',
-      transKey: 'nav.dashboards.product-type-subcategory',
+      transKey: 'nav.dashboards.subcategories',
     },
     {
       id: 'dashboards.product-type-stock',
