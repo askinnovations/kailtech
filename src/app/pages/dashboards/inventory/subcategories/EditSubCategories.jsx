@@ -1,129 +1,261 @@
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { Button, Input } from "components/ui";
+import { Button, Input, Select } from "components/ui";
 import { Page } from "components/shared/Page";
 import axios from "utils/axios";
 import { toast } from "sonner";
 
-export default function EditVertical() {
+export default function EditSubcategory() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const [vertical, setVertical] = useState({ name: "", code: "" });
+  const [formData, setFormData] = useState({
+    category: "",
+    type: "",
+    instrumenttype: "",
+    name: "",
+    hsn: "",
+    critical: "0",
+    unit: "",
+    expiry: "",
+    reorder: "",
+    min: "",
+    tax: "",
+    cost: "",
+  });
+
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [typeOptions, setTypeOptions] = useState([]);
+  const [instrumentTypeOptions, setInstrumentTypeOptions] = useState([]);
+  const [unitOptions, setUnitOptions] = useState([]);
+  const [taxOptions, setTaxOptions] = useState([]);
 
   useEffect(() => {
-  const fetchVertical = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`inventory/subcategory-byid//${id}`);
-      const result = response.data;
+    const fetchDropdowns = async () => {
+      try {
+        const [cat, typ, inst, unit, tax] = await Promise.all([
+          axios.get("/inventory/category-list"),
+          axios.get("/get-type"),
+          axios.get("/get-instrument-type"),
+          axios.get("/master/units-list"),
+          axios.get("/master/get-taxslab-list"),
+        ]);
 
-      if (result.status === "true" && result.data) {
-        const taxSlab = result.data;
-        setVertical({
-          name: taxSlab.name || "",
-          code: taxSlab.code || "",
-        });
-      } else {
-        toast.error(result.message || "Failed to load vertical.");
+        setCategoryOptions(
+          (cat.data.data || []).map((c) => ({ label: c.name, value: c.id })),
+        );
+        setTypeOptions(
+          (typ.data.data || []).map((t) => ({ label: t.name, value: t.id })),
+        );
+        setInstrumentTypeOptions(
+          (inst.data.data || []).map((i) => ({ label: i.name, value: i.id })),
+        );
+        setUnitOptions(
+          (unit.data.data || []).map((u) => ({ label: u.name, value: u.id })),
+        );
+        setTaxOptions(
+          (tax.data.data || []).map((t) => ({
+            label: `${t.name} (${t.percentage}%)`,
+            value: t.id,
+          })),
+        );
+      } catch (err) {
+        console.error("Error loading dropdowns:", err);
+        toast.error("Failed to load dropdowns");
       }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      toast.error("Something went wrong while loading vertical.");
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`/inventory/subcategory-byid/${id}`);
+        const result = response.data;
+
+        if (result.status === "true" && result.data) {
+          setFormData({
+            category: result.data.category?.toString() || "",
+            type: result.data.type?.toString() || "",
+            instrumenttype: result.data.instrumenttype?.toString() || "",
+            name: result.data.name || "",
+            hsn: result.data.hsn || "",
+            critical: result.data.critical?.toString() || "0",
+            unit: result.data.unit?.toString() || "",
+            expiry: result.data.expiry?.toString() || "",
+            reorder: result.data.reorder?.toString() || "",
+            min: result.data.min?.toString() || "",
+            tax: result.data.tax?.toString() || "",
+            cost: result.data.cost?.toString() || "",
+          });
+        } else {
+          toast.error(result.message || "Failed to load data");
+        }
+      } catch (err) {
+        console.error("Error fetching subcategory by ID:", err);
+        toast.error("Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDropdowns();
+    fetchData();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  fetchVertical();
-}, [id]);
-
+  // ✅ Custom Select change handler
+  const handleSelectChange = (name, value) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const form = new FormData();
-      form.append("name", vertical.name);
-      form.append("code", vertical.code);
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== "" && value !== null && value !== undefined) {
+          form.append(key, value);
+        }
+      });
 
-      const response = await axios.post(`inventory/subcategory-update/${id}`, form);
+      const response = await axios.post(
+        `/inventory/subcategory-update/${id}`,
+        form,
+      );
       const result = response.data;
 
       if (result.status === "true") {
-        toast.success(result.message || "Sub Category updated successfully ✅", {
-          duration: 1000,
-          icon: "✅",
-        });
+        toast.success("Subcategory updated successfully ✅");
         navigate("/dashboards/inventory/subcategories");
       } else {
-        toast.error(result.message || "Failed to update vertical ❌");
+        toast.error(result.message || "Update failed ❌");
       }
     } catch (err) {
-      console.error("Update error:", err);
-      toast.error("Something went wrong while updating vertical.");
+      console.error("Update failed:", err);
+      toast.error("Error during update");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Page title="Edit Categories">
+    <Page title="Edit Subcategory">
       <div className="p-6">
-        {/* ✅ Header + Back Button */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Edit Categories
-          </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Edit Subcategory</h2>
           <Button
             variant="outline"
-            className="text-white bg-blue-600 hover:bg-blue-700"
+            className="bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => navigate("/dashboards/inventory/subcategories")}
           >
-            Back to List
+            Back
           </Button>
         </div>
 
-        {/* ✅ Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Category Name"
-            value={vertical.name}
-            onChange={(e) => setVertical({ ...vertical, name: e.target.value })}
+            label="Subcategory Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             required
           />
           <Input
-            label="Code"
-            value={vertical.code}
-            onChange={(e) => setVertical({ ...vertical, code: e.target.value })}
+            label="HSN"
+            name="hsn"
+            value={formData.hsn}
+            onChange={handleChange}
+            required
+          />
+
+          <Select
+            name="category"
+            label="Category"
+            data={categoryOptions}
+            value={formData.category}
+            onChange={(val) => handleSelectChange("category", val)}
+          />
+
+          <Select
+            name="type"
+            label="Type"
+            data={typeOptions}
+            value={formData.type}
+            onChange={(val) => handleSelectChange("type", val)}
+            required
+          />
+          <Select
+            name="instrumenttype"
+            label="Instrument Type"
+            data={instrumentTypeOptions}
+            value={formData.instrumenttype}
+            onChange={(val) => handleSelectChange("instrumenttype", val)}
+            required
+          />
+          <Select
+            name="unit"
+            label="Unit"
+            data={unitOptions}
+            value={formData.unit}
+            onChange={(val) => handleSelectChange("unit", val)}
+            required
+          />
+          <Select
+            name="tax"
+            label="Tax Slab"
+            data={taxOptions}
+            value={formData.tax}
+            onChange={(val) => handleSelectChange("tax", val)}
+            required
+          />
+          
+          <Select
+            name="critical"
+            label="Critical"
+            data={[
+              { label: "Yes", value: "1" },
+              { label: "No", value: "0" },
+            ]}
+            value={formData.critical}
+            onChange={(val) => handleSelectChange("critical", val)}
+          />
+
+          <Input
+            label="Expiry"
+            name="expiry"
+            value={formData.expiry}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            label="Reorder Level"
+            name="reorder"
+            value={formData.reorder}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            label="Min Level"
+            name="min"
+            value={formData.min}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            label="Cost"
+            name="cost"
+            value={formData.cost}
+            onChange={handleChange}
             required
           />
 
           <Button type="submit" color="primary" disabled={loading}>
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 000 8v4a8 8 0 01-8-8z"
-                  ></path>
-                </svg>
-                Updating...
-              </div>
-            ) : (
-              "Update"
-            )}
+            {loading ? "Updating..." : "Update"}
           </Button>
         </form>
       </div>

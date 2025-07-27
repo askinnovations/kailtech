@@ -36,7 +36,8 @@ const protectedRoutes = {
             {
               path: "reports",
               lazy: async () => ({
-                Component: (await import("app/pages/dashboards/Reports")).default,
+                Component: (await import("app/pages/dashboards/Reports"))
+                  .default,
               }),
             },
             {
@@ -44,8 +45,12 @@ const protectedRoutes = {
               children: [
                 {
                   path: "electro-technical",
-                  lazy: async () => ({ 
-                    Component: (await import("app/pages/dashboards/material-list/ElectroTechnical")).default,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        "app/pages/dashboards/material-list/ElectroTechnical"
+                      )
+                    ).default,
                   }),
                 },
                 // {
@@ -113,100 +118,145 @@ const protectedRoutes = {
             {
               path: "master-data",
               children: [
-              
                 {
                   path: "unit-types",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/UnitTypes")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/UnitTypes"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "create", 
+                      path: "create",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/UnitTypes/AddUnitType")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/UnitTypes/AddUnitType"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "edit/:id", 
+                      path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/UnitTypes/EditUnitType")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/UnitTypes/EditUnitType"
+                          )
+                        ).default,
                       }),
                     },
                   ],
                 },
                 {
-                    path: "modes",
-                    children: [
-                      {
-                        path: "", 
-                        lazy: async () => ({
-                          Component: (await import("app/pages/dashboards/master-data/Modes")).default,
-                        }),
-                      },
-                      {
-                        path: "create", 
-                        lazy: async () => ({
-                          Component: (await import("app/pages/dashboards/master-data/Modes/AddModes")).default,
-                        }),
-                      },
-                      {
-                        path: "edit/:id", 
-                        lazy: async () => ({
-                          Component: (await import("app/pages/dashboards/master-data/Modes/EditModes")).default,
-                        }),
-                      },
-                    ],
-                  },
+                  path: "modes",
+                  children: [
+                    {
+                      path: "",
+                      lazy: async () => ({
+                        Component: (
+                          await import("app/pages/dashboards/master-data/Modes")
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "create",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Modes/AddModes"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Modes/EditModes"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
                 {
                   path: "tax-slabs",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/TaxSlabs")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/TaxSlabs"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "create", 
+                      path: "create",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/TaxSlabs/AddTaxSlab")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/TaxSlabs/AddTaxSlab"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "edit/:id", 
+                      path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/TaxSlabs/EditTaxSlab")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/TaxSlabs/EditTaxSlab"
+                          )
+                        ).default,
                       }),
                     },
                   ],
                 },
 
                 {
-                path: "verticals",
-                children: [
-                  {
-                    path: "", 
-                    lazy: async () => ({
-                      Component: (await import("app/pages/dashboards/master-data/Verticals")).default,
-                    }),
-                  },
-                  {
-                    path: "create", 
-                    lazy: async () => ({
-                      Component: (await import("app/pages/dashboards/master-data/Verticals/AddVertical")).default,
-                    }),
-                  },
-                  {
-                    path: "edit/:id", 
-                    lazy: async () => ({
-                      Component: (await import("app/pages/dashboards/master-data/Verticals/EditVertical")).default,
-                    }),
-                  },
-                ],
-              },
+                  path: "verticals",
+                  children: [
+                    {
+                      path: "",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Verticals"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "create",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Verticals/AddVertical"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Verticals/EditVertical"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
 
                 // {
                 //   path: "document-master",
@@ -218,21 +268,33 @@ const protectedRoutes = {
                   path: "currencies",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/Currencies")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Currencies"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "create", 
+                      path: "create",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/Currencies/AddCurrency")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Currencies/AddCurrency"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "edit/:id", 
+                      path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/Currencies/EditCurrency")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Currencies/EditCurrency"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -241,21 +303,31 @@ const protectedRoutes = {
                   path: "units",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/Units")).default,
+                        Component: (
+                          await import("app/pages/dashboards/master-data/Units")
+                        ).default,
                       }),
                     },
                     {
                       path: "create",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/Units/AddUnit")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Units/AddUnit"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "edit/:id", 
+                      path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/Units/EditUnit")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/Units/EditUnit"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -279,24 +351,35 @@ const protectedRoutes = {
                     {
                       index: true,
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/ManageLabs")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/ManageLabs"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "create",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/ManageLabs/AddLab")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/ManageLabs/AddLab"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/master-data/ManageLabs/EditLab")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/master-data/ManageLabs/EditLab"
+                          )
+                        ).default,
                       }),
                     },
                   ],
                 },
-
 
                 // {
                 //   path: "activity-log",
@@ -319,51 +402,110 @@ const protectedRoutes = {
               ],
             },
             {
-            path: "calibration-operations",
-            children: [
-              {
-                path: "calibration-standards",
-                children: [
-                  {
-                    path: "", // List Page
-                    lazy: async () => ({
-                      Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards")).default,
-                    }),
-                  },
-                  {
-                    path: "add", // Add Page
-                    lazy: async () => ({
-                      Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards/AddCalibrationStandards")).default,
-                    }),
-                  },
-                  {
-                      path: "edit/:id",
+              path: "calibration-operations",
+              children: [
+                {
+                  path: "calibration-standards",
+                  children: [
+                    {
+                      path: "", // List Page
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-standards/EditCalibrationStandards")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/calibration-standards"
+                          )
+                        ).default,
                       }),
                     },
-                ],
-              },
-                
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/calibration-standards/AddCalibrationStandards"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/calibration-standards/EditCalibrationStandards"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
+
                 {
                   path: "calibration-methods",
                   children: [
                     {
                       path: "", // List Page
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/calibration-methods"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "add", // Add Page
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods/AddCalibrationMethods")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/calibration-methods/AddCalibrationMethods"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/calibration-operations/calibration-methods/EditCalibrationMethods")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/calibration-methods/EditCalibrationMethods"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
+                {
+                  path: "instrument-list",
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/instrument-list"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/instrument-list/AddCalibrationInstrument"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-operations/instrument-list/EditCalibrationInstrumnet"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -415,26 +557,37 @@ const protectedRoutes = {
             {
               path: "people",
               children: [
-
                 {
                   path: "customer-types",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/customer-types")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/customer-types"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/customer-types/AddCustomerType")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/customer-types/AddCustomerType"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/customer-types/EditCustomerType")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/customer-types/EditCustomerType"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -443,13 +596,21 @@ const protectedRoutes = {
                 {
                   path: "customer-categories",
                   lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/customer-categories")).default,
+                    Component: (
+                      await import(
+                        "app/pages/dashboards/people/customer-categories"
+                      )
+                    ).default,
                   }),
                 },
                 {
                   path: "customer-categories/add",
                   lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/customer-categories/AddCustomerCategory")).default,
+                    Component: (
+                      await import(
+                        "app/pages/dashboards/people/customer-categories/AddCustomerCategory"
+                      )
+                    ).default,
                   }),
                 },
 
@@ -457,21 +618,33 @@ const protectedRoutes = {
                   path: "specific-purposes",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/specific-purposes")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/specific-purposes"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/specific-purposes/AddSpecificPurpose")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/specific-purposes/AddSpecificPurpose"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/specific-purposes/EditSpecificPurpose")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/specific-purposes/EditSpecificPurpose"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -481,46 +654,65 @@ const protectedRoutes = {
                   path: "customers",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/customers")).default,
+                        Component: (
+                          await import("app/pages/dashboards/people/customers")
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/customers/AddCustomer")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/customers/AddCustomer"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/customers/EditCustomer")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/customers/EditCustomer"
+                          )
+                        ).default,
                       }),
                     },
                   ],
                 },
 
-
                 {
                   path: "promoters",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/promoters")).default,
+                        Component: (
+                          await import("app/pages/dashboards/people/promoters")
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/promoters/AddPromoter")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/promoters/AddPromoter"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/people/promoters/EditPromoter")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/people/promoters/EditPromoter"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -529,29 +721,39 @@ const protectedRoutes = {
                 {
                   path: "suppliers",
                   lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/suppliers")).default,
+                    Component: (
+                      await import("app/pages/dashboards/people/suppliers")
+                    ).default,
                   }),
                 },
                 {
                   path: "suppliers/add",
                   lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/suppliers/AddSupplier")).default,
+                    Component: (
+                      await import(
+                        "app/pages/dashboards/people/suppliers/AddSupplier"
+                      )
+                    ).default,
                   }),
                 },
 
                 {
                   path: "users",
                   lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/users")).default,
+                    Component: (
+                      await import("app/pages/dashboards/people/users")
+                    ).default,
                   }),
                 },
                 {
                   path: "users/add",
                   lazy: async () => ({
-                    Component: (await import("app/pages/dashboards/people/users/AddUser")).default,
+                    Component: (
+                      await import("app/pages/dashboards/people/users/AddUser")
+                    ).default,
                   }),
                 },
-            ],
+              ],
             },
             {
               path: "inventory",
@@ -560,21 +762,33 @@ const protectedRoutes = {
                   path: "categories",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/inventory/categories")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/inventory/categories"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/inventory/categories/AddCategories")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/inventory/categories/AddCategories"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/inventory/categories/EditCategories")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/inventory/categories/EditCategories"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -583,21 +797,33 @@ const protectedRoutes = {
                   path: "subcategories",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/inventory/subcategories")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/inventory/subcategories"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/inventory/subcategories/AddSubCategories")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/inventory/subcategories/AddSubCategories"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/inventory/subcategories/EditSubCategories")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/inventory/subcategories/EditSubCategories"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -611,21 +837,31 @@ const protectedRoutes = {
                   path: "manage-branch",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-branch")).default,
+                        Component: (
+                          await import("app/pages/dashboards/hrm/manage-branch")
+                        ).default,
                       }),
                     },
                     {
-                      path: "add", 
+                      path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-branch/AddManageBranch")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-branch/AddManageBranch"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "edit/:id", 
+                      path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-branch/EditManageBranch")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-branch/EditManageBranch"
+                          )
+                        ).default,
                       }),
                     },
                   ],
@@ -634,52 +870,74 @@ const protectedRoutes = {
                   path: "manage-departments",
                   children: [
                     {
-                      path: "", 
+                      path: "",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-departments")).default,
-                      }),
-                    },
-                    {
-                      path: "add", 
-                      lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-departments/AddManageDepartment")).default,
-                      }),
-                    },
-                    {
-                      path: "edit/:id", 
-                      lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-departments/EditManageDepartments")).default,
-                      }),
-                    },
-                  ],
-                },
-                    {
-                  path: "manage-designations",
-                  children: [
-                    {
-                      path: "", 
-                      lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-designations")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-departments"
+                          )
+                        ).default,
                       }),
                     },
                     {
                       path: "add",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-designations/AddManageDesignations")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-departments/AddManageDepartment"
+                          )
+                        ).default,
                       }),
                     },
                     {
-                      path: "edit/:id", 
+                      path: "edit/:id",
                       lazy: async () => ({
-                        Component: (await import("app/pages/dashboards/hrm/manage-designations/EditManageDesignations")).default,
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-departments/EditManageDepartments"
+                          )
+                        ).default,
                       }),
                     },
                   ],
                 },
-              
+                {
+                  path: "manage-designations",
+                  children: [
+                    {
+                      path: "",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-designations"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "add",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-designations/AddManageDesignations"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/manage-designations/EditManageDesignations"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
               ],
             },
-
           ],
         },
       ],

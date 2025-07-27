@@ -31,10 +31,10 @@ import { useNavigate } from "react-router";
 const confirmMessages = {
   pending: {
     description:
-      "Are you sure you want to delete this category? Once deleted, it cannot be restored.",
+      "Are you sure you want to delete this Sub category? Once deleted, it cannot be restored.",
   },
   success: {
-    title: "Category Deleted",
+    title: "Sub Category Deleted",
   },
 };
 
@@ -42,7 +42,7 @@ export function RowActions({ row, table }) {
   const navigate = useNavigate(); // 👈 Hook
    const handleEdit = () => {
     const id = row.original.id; // 👈 your API data should return "id"
-    navigate(`/dashboards/inventory/categories/edit/${id}`);
+    navigate(`/dashboards/inventory/subcategories/edit/${id}`);
   };
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -67,7 +67,7 @@ export function RowActions({ row, table }) {
   setConfirmDeleteLoading(true);
 
     try {
-      await axios.delete(`/inventory/category-delete/${id}`);
+      await axios.delete(`/inventory/subcategory-delete/${id}`);
       table.options.meta?.deleteRow(row); // remove row from UI
       setDeleteSuccess(true);
       toast.success("category deleted successfully ✅", {
