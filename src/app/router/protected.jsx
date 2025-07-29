@@ -402,6 +402,47 @@ const protectedRoutes = {
               ],
             },
             {
+              path: "calibration-process",
+              children: [
+                {
+                  path: "inward-entry-lab",
+                  children: [
+                    {
+                      path: "", // List Page
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-process/inward-entry-lab"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "add", // Add Page
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-process/inward-entry-lab/AddInwardEntryLab"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "edit/:id", // Edit Page
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/calibration-process/inward-entry-lab/EditInwardEntryLab"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
+              ],
+            },
+
+            {
               path: "calibration-operations",
               children: [
                 {

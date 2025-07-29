@@ -13,6 +13,8 @@ export default function AddInstrument() {
     name: "",
     sop: [],
     standard: [],
+    typeofsupport: [],
+    typeofmaster:[],
     description: "",
     discipline: "",
     group: "",
@@ -21,19 +23,20 @@ export default function AddInstrument() {
 
   const [sopOptions, setSopOptions] = useState([]);
   const [standardOptions, setStandardOptions] = useState([]);
+  const [subcategoryOne, setSubcategoryOne] = useState([]);
+  const [subcategoryTwo, setSubcategoryTwo] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchDropdowns = async () => {
       try {
-        const [sopRes, standardRes] = await Promise.all([
-          axios.get("/calibrationoperations/calibration-method-list"),
-          axios.get("/calibrationoperations/calibration-standard-list"),
-          axios.get("/inventory/subcategory-list"),
-        ]);
-
-        console.log("SOP API Response:", sopRes.data);
-        console.log("Standard API Response:", standardRes.data);
+        const [sopRes, standardRes, subcategoryoneRes, subcategorytwoRes] =
+          await Promise.all([
+            axios.get("/calibrationoperations/calibration-method-list"),
+            axios.get("/calibrationoperations/calibration-standard-list"),
+            axios.get("/inventory/subcategory-list"),
+            axios.get("/inventory/subcategory-list"), // ✅ Added this line to fix Type of Master issue
+          ]);
 
         const sopData = Array.isArray(sopRes?.data?.data)
           ? sopRes.data.data
@@ -41,6 +44,14 @@ export default function AddInstrument() {
 
         const standardData = Array.isArray(standardRes?.data?.data)
           ? standardRes.data.data
+          : [];
+
+        const subcategoryoneData = Array.isArray(subcategoryoneRes?.data?.data)
+          ? subcategoryoneRes.data.data
+          : [];
+
+        const subcategorytwoData = Array.isArray(subcategorytwoRes?.data?.data)
+          ? subcategorytwoRes.data.data
           : [];
 
         setSopOptions(
@@ -52,6 +63,20 @@ export default function AddInstrument() {
 
         setStandardOptions(
           standardData.map((item) => ({
+            label: item.name,
+            value: item.id,
+          })),
+        );
+
+        setSubcategoryOne(
+          subcategoryoneData.map((item) => ({
+            label: item.name,
+            value: item.id,
+          })),
+        );
+
+        setSubcategoryTwo(
+          subcategorytwoData.map((item) => ({
             label: item.name,
             value: item.id,
           })),
@@ -197,6 +222,37 @@ export default function AddInstrument() {
 
           {/* Remark */}
           <Input label="Remark" name="remark" onChange={handleInputChange} />
+
+          {/* validation */}
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Type Of Support
+            </label>
+            <ReactSelect
+              isMulti
+              name="typeofsupport"
+              options={subcategoryOne}
+              onChange={(selected) =>
+                handleMultiSelectChange(selected, "typeofsupport")
+              }
+              placeholder="Select Type Of Support"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Type Of Master
+            </label>
+            <ReactSelect
+              isMulti
+              name="typeofmaster"
+              options={subcategoryTwo}
+              onChange={(selected) =>
+                handleMultiSelectChange(selected, "typeofmaster")
+              }
+              placeholder="Select Type Of Master"
+            />
+          </div>
 
           <div className="col-span-1 md:col-span-2">
             <Button type="submit" color="primary" disabled={loading}>
