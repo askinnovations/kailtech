@@ -26,7 +26,7 @@ import { useNavigate } from "react-router";
 const confirmMessages = {
   pending: {
     description:
-      "Are you sure you want to delete this calibration standards? Once deleted, it cannot be restored.",
+      "Are you sure you want to delete this calibration instrument? Once deleted, it cannot be restored.",
   },
   success: {
     title: "calibration standards Deleted",
@@ -37,7 +37,7 @@ export function RowActions({ row, table }) {
     const navigate = useNavigate(); // 👈 Hook
    const handleEdit = () => {
     const id = row.original.id;
-    navigate(`/dashboards/calibration-operations/calibration-standards/edit/${id}`);
+    navigate(`/dashboards/calibration-operations/instrument-list/edit/${id}`);
   };
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -60,17 +60,17 @@ export function RowActions({ row, table }) {
   setConfirmDeleteLoading(true);
 
   try {
-    await axios.delete(`/calibrationoperations/calibration-standard-delete/${id}`);
+    await axios.delete(`/calibrationoperations/delete-instrument/${id}`);
     table.options.meta?.deleteRow(row); // remove row from UI
     setDeleteSuccess(true);
-     toast.success("calibration operations deleted successfully ✅", {
+     toast.success("calibration operations  instrument deleted successfully ✅", {
       duration: 1000,
       icon: "🗑️",
     });
   } catch (error) {
     console.error("Delete failed:", error);
     setDeleteError(true);
-     toast.error("Failed to delete calibration operations ❌", {
+     toast.error("Failed to delete calibration operations instrument ❌", {
       duration: 2000,
     });
   } finally {

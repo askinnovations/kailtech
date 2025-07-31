@@ -31,7 +31,7 @@ import { useNavigate } from "react-router";
 const confirmMessages = {
   pending: {
     description:
-      "Are you sure you want to delete this manage designation ? Once deleted, it cannot be restored.",
+      "Are you sure you want to delete this salary structure design ? Once deleted, it cannot be restored.",
   },
   success: {
     title: "Manage designation Deleted",
@@ -42,7 +42,7 @@ export function RowActions({ row, table }) {
   const navigate = useNavigate(); // 👈 Hook
    const handleEdit = () => {
     const id = row.original.id; // 👈 your API data should return "id"
-    navigate(`/dashboards/hrm/manage-designations/edit/${id}`);
+    navigate(`/dashboards/hrm/salary-structure-design/edit/${id}`);
   };
 
 
@@ -68,17 +68,17 @@ export function RowActions({ row, table }) {
   setConfirmDeleteLoading(true);
 
   try {
-    await axios.delete(`/hrm/delete-designation/${id}`);
+    await axios.delete(`/hrm/salary-structure-delete/${id}`);
     table.options.meta?.deleteRow(row); // remove row from UI
     setDeleteSuccess(true);
-     toast.success("Manage designation deleted successfully ", {
+     toast.success("Salary structure deleted successfully ", {
       duration: 1000,
       icon: "🗑️",
     });
   } catch (error) {
     console.error("Delete failed:", error);
     setDeleteError(true);
-     toast.error("Failed to delete Manage designation ❌", {
+     toast.error("Failed to delete Salary structure  ❌", {
       duration: 2000,
     });
   } finally {

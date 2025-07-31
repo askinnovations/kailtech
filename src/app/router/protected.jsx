@@ -908,6 +908,42 @@ const protectedRoutes = {
                   ],
                 },
                 {
+                  path: "salary-structure-design",
+                  children: [
+                    {
+                      path: "",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/salary-structure-design"
+                          )
+                        ).default,
+                      }),
+                    },
+                    {
+                      path: "add",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/salary-structure-design/AddSalaryStructureDesign"
+                          )
+                        ).default,
+                      }),
+                    },
+
+                    {
+                      path: "edit/:id",
+                      lazy: async () => ({
+                        Component: (
+                          await import(
+                            "app/pages/dashboards/hrm/salary-structure-design/EditSalaryStructureDesign"
+                          )
+                        ).default,
+                      }),
+                    },
+                  ],
+                },
+                {
                   path: "manage-departments",
                   children: [
                     {

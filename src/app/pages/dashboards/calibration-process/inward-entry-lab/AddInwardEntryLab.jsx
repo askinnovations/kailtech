@@ -190,10 +190,7 @@ export default function AddInwardEntry() {
     fetchDropdowns();
   }, []);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: value }));
-  // };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -267,7 +264,7 @@ export default function AddInwardEntry() {
       setFormData((prev) => ({ ...prev, concern_person_id: "" }));
       setSelectedConcernPerson({ designation: "", email: "", mobile: "" });
     }
-    // 🔁 New Logic here
+    
     if (name === "concern_person_id" && option) {
       fetchConcernPersonDetails(option.value);
     }
@@ -338,7 +335,7 @@ export default function AddInwardEntry() {
       setQuotationOptions(
         data.map((item) => ({
           label: `${String(item.id).padStart(5, "0")}`,
-          value: item.id, // You can also store quotationno as value if needed
+          value: item.id, 
         })),
       );
     } catch (err) {
@@ -766,8 +763,7 @@ export default function AddInwardEntry() {
             />
           </div>
 
-          {/* Mode Of Receipt Dropdown */}
-          {/* Mode Of Receipt Dropdown */}
+        
           {/* Mode Of Receipt Dropdown */}
           <div>
             <label className="mb-1 block text-sm font-medium">
@@ -1009,7 +1005,7 @@ export default function AddInwardEntry() {
           )}
           {/* CERTIFICATE COLLECTION DETAILS (Please tick) */}
           <div className="mt-8 space-y-6">
-            {/* Certificate Collect As */}
+          
             <div>
               <label className="block text-sm font-medium">
                 Certificate Collect as

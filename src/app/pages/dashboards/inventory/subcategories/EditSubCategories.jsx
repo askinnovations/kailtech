@@ -32,8 +32,10 @@ export default function EditSubcategory() {
   const [taxOptions, setTaxOptions] = useState([]);
 
   useEffect(() => {
-    const fetchDropdowns = async () => {
+    const fetchAll = async () => {
       try {
+        setLoading(true);
+
         const [cat, typ, inst, unit, tax] = await Promise.all([
           axios.get("/inventory/category-list"),
           axios.get("/get-type"),
@@ -42,33 +44,12 @@ export default function EditSubcategory() {
           axios.get("/master/get-taxslab-list"),
         ]);
 
-        setCategoryOptions(
-          (cat.data.data || []).map((c) => ({ label: c.name, value: c.id })),
-        );
-        setTypeOptions(
-          (typ.data.data || []).map((t) => ({ label: t.name, value: t.id })),
-        );
-        setInstrumentTypeOptions(
-          (inst.data.data || []).map((i) => ({ label: i.name, value: i.id })),
-        );
-        setUnitOptions(
-          (unit.data.data || []).map((u) => ({ label: u.name, value: u.id })),
-        );
-        setTaxOptions(
-          (tax.data.data || []).map((t) => ({
-            label: `${t.name} (${t.percentage}%)`,
-            value: t.id,
-          })),
-        );
-      } catch (err) {
-        console.error("Error loading dropdowns:", err);
-        toast.error("Failed to load dropdowns");
-      }
-    };
+        setCategoryOptions(cat.data.data || []);
+        setTypeOptions(typ.data.data || []);
+        setInstrumentTypeOptions(inst.data.data || []);
+        setUnitOptions(unit.data.data || []);
+        setTaxOptions(tax.data.data || []);
 
-    const fetchData = async () => {
-      try {
-        setLoading(true);
         const response = await axios.get(`/inventory/subcategory-byid/${id}`);
         const result = response.data;
 
@@ -88,33 +69,31 @@ export default function EditSubcategory() {
             cost: result.data.cost?.toString() || "",
           });
         } else {
-          toast.error(result.message || "Failed to load data");
+          toast.error(result.message || "Failed to load subcategory data");
         }
       } catch (err) {
-        console.error("Error fetching subcategory by ID:", err);
-        toast.error("Failed to fetch data");
+        console.error("Error fetching data:", err);
+        toast.error("Error fetching data");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDropdowns();
-    fetchData();
+    fetchAll();
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // ✅ Custom Select change handler
-  const handleSelectChange = (name, value) => {
+    console.log(`Changed: ${name} => ${value}`);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    console.log("🔍 Sending form data:", formData);
+
     try {
       const form = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -122,6 +101,8 @@ export default function EditSubcategory() {
           form.append(key, value);
         }
       });
+
+      console.log("📦 Final payload:", Array.from(form.entries()));
 
       const response = await axios.post(
         `/inventory/subcategory-update/${id}`,
@@ -165,6 +146,7 @@ export default function EditSubcategory() {
             onChange={handleChange}
             required
           />
+
           <Input
             label="HSN"
             name="hsn"
@@ -174,56 +156,90 @@ export default function EditSubcategory() {
           />
 
           <Select
-            name="category"
             label="Category"
-            data={categoryOptions}
+            name="category"
             value={formData.category}
-            onChange={(val) => handleSelectChange("category", val)}
-          />
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Category </option>
+            {categoryOptions.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </Select>
 
           <Select
-            name="type"
             label="Type"
-            data={typeOptions}
+            name="type"
             value={formData.type}
-            onChange={(val) => handleSelectChange("type", val)}
+            onChange={handleChange}
             required
-          />
+          >
+            <option value="">Select Type </option>
+            {typeOptions.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </Select>
+
           <Select
-            name="instrumenttype"
             label="Instrument Type"
-            data={instrumentTypeOptions}
+            name="instrumenttype"
             value={formData.instrumenttype}
-            onChange={(val) => handleSelectChange("instrumenttype", val)}
+            onChange={handleChange}
             required
-          />
+          >
+            <option value=""> Select Instrument Type  </option>
+            {instrumentTypeOptions.map((ins) => (
+              <option key={ins.id} value={ins.id}>
+                {ins.name}
+              </option>
+            ))}
+          </Select>
+
           <Select
-            name="unit"
             label="Unit"
-            data={unitOptions}
+            name="unit"
             value={formData.unit}
-            onChange={(val) => handleSelectChange("unit", val)}
+            onChange={handleChange}
             required
-          />
+          >
+            <option value=""> Select Unit </option>
+            {unitOptions.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.name}
+              </option>
+            ))}
+          </Select>
+
           <Select
-            name="tax"
             label="Tax Slab"
-            data={taxOptions}
+            name="tax"
             value={formData.tax}
-            onChange={(val) => handleSelectChange("tax", val)}
+            onChange={handleChange}
             required
-          />
-          
+          >
+            <option value=""> Select Tax </option>
+            {taxOptions.map((t) => (
+              <option key={t.id} value={t.id}>
+                {`${t.name} (${t.percentage}%)`}
+              </option>
+            ))}
+          </Select>
+
           <Select
-            name="critical"
             label="Critical"
-            data={[
-              { label: "Yes", value: "1" },
-              { label: "No", value: "0" },
-            ]}
+            name="critical"
             value={formData.critical}
-            onChange={(val) => handleSelectChange("critical", val)}
-          />
+            onChange={handleChange}
+            required
+          >
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </Select>
 
           <Input
             label="Expiry"
@@ -255,7 +271,31 @@ export default function EditSubcategory() {
           />
 
           <Button type="submit" color="primary" disabled={loading}>
-            {loading ? "Updating..." : "Update"}
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <svg
+                  className="h-4 w-4 animate-spin text-white"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 000 8v4a8 8 0 01-8-8z"
+                  />
+                </svg>
+                Updating...
+              </div>
+            ) : (
+              "Update"
+            )}
           </Button>
         </form>
       </div>

@@ -165,7 +165,7 @@ export default function OrdersDatatableV1() {
   }
 
   return (
-    <Page title="Modes List">
+    <Page title="Salary Structure Design List">
       <div className="transition-content w-full pb-5">
         <div
           className={clsx(

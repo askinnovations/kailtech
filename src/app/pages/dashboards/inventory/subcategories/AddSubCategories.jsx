@@ -114,7 +114,7 @@ export default function AddSubcategory() {
             onChange={handleChange}
             required
           >
-            <option value="">-- Select Category --</option>
+            <option value=""> Select Category </option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
@@ -129,7 +129,7 @@ export default function AddSubcategory() {
             onChange={handleChange}
             required
           >
-            <option value="">-- Select Type --</option>
+            <option value=""> Select Type </option>
             {types.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name}
@@ -144,7 +144,7 @@ export default function AddSubcategory() {
             onChange={handleChange}
             required
           >
-            <option value="">-- Select Instrument Type --</option>
+            <option value=""> Select Instrument Type </option>
             {instrumentTypes.map((ins) => (
               <option key={ins.id} value={ins.id}>
                 {ins.name}
@@ -186,7 +186,7 @@ export default function AddSubcategory() {
             onChange={handleChange}
             required
           >
-            <option value="">-- Select Unit --</option>
+            <option value=""> Select Unit </option>
             {units.map((u) => (
               <option key={u.id} value={u.id}>
                 {u.name}
@@ -222,7 +222,7 @@ export default function AddSubcategory() {
             onChange={handleChange}
             required
           >
-            <option value="">-- Select Tax --</option>
+            <option value=""> Select Tax </option>
             {taxSlabs.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name}
